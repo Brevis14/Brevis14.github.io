@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>个人主页 | 许慧桦</title>
+  <title>我的作品集</title>
   <style>
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: #ffffff;
-      color: #37352f;
-      line-height: 1.6;
+      font-family: sans-serif;
+      background: #fafafa;
     }
+
+    /* 顶部封面 */
     .hero {
       background: url("https://i.postimg.cc/ZnwqLHRG/00004-4032717414-3.png") top/contain no-repeat;
       height: 280px;
@@ -19,105 +19,106 @@
       align-items: center;
       justify-content: center;
     }
+
     .hero h1 {
       color: white;
-      font-size: 2rem;
-    }
-    .intro {
-      display: flex;
-      max-width: 1000px;
-      margin: auto;
-      padding: 2rem;
-      gap: 2rem;
-      align-items: center;
-    }
-    .intro-text {
-      flex: 1;
-    }
-    .intro-text h2 {
-      font-size: 1.8rem;
-      margin-bottom: 0.5rem;
-    }
-    .intro-text p {
-      background: #f7f6f3;
-      padding: 1rem;
+      font-size: 2em;
+      background: rgba(0,0,0,0.5);
+      padding: 10px 20px;
       border-radius: 8px;
     }
-    .intro img {
-      width: 250px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+
+    /* 整体容器：左边导航 + 中间内容 */
+    .container {
+      display: flex;
     }
-    .section {
-      max-width: 900px;
-      margin: auto;
-      padding: 2rem;
+
+    /* 左侧导航栏 */
+    .sidebar {
+      width: 200px;
+      height: 100vh;
+      position: fixed;   /* 固定在左侧 */
+      top: 0;
+      left: 0;
+      background: #ffffff;
+      border-right: 1px solid #ddd;
+      padding: 20px;
+      margin-top: 280px; /* 让导航栏从hero下方开始 */
     }
-    .section h2 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
     }
-    .card {
-      border: 1px solid #e5e5e5;
-      border-radius: 6px;
-      padding: 1rem;
-      margin: 1rem 0;
-      transition: 0.2s ease;
+
+    .sidebar li {
+      margin: 15px 0;
     }
-    .card:hover {
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+
+    .sidebar a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
     }
-    .footer {
-      text-align: center;
-      padding: 2rem;
-      font-size: 0.9rem;
-      color: #888;
+
+    .sidebar a:hover {
+      color: #0070f3;
+    }
+
+    /* 中间内容 */
+    .content {
+      margin-left: 220px; /* 给侧边栏留空间 */
+      padding: 40px;
+      max-width: 800px;
+    }
+
+    .content section {
+      margin-bottom: 60px;
     }
   </style>
 </head>
 <body>
-  <!-- 顶部背景 -->
+
+  <!-- 顶部封面 -->
   <div class="hero">
-    <h1>Personal Website</h1>
+    <h1>我的作品集</h1>
   </div>
 
-  <!-- 介绍部分 -->
-  <div class="intro">
-    <div class="intro-text">
-      <h2>你好！我是许慧桦 👋</h2>
-      <p>
-        我在读软件工程专业，兼具美术功底与 IT 能力。<br>
-        热衷于探索 AI 图像生成、交互可视化与游戏美术。<br>
-        我相信技术与艺术的结合能够创造兼具功能性与美感的产品。
-      </p>
-    </div>
-    <img src="https://i.imgur.com/8Km9tLL.jpg" alt="个人照片">
+  <!-- 主体区域：左边导航 + 中间内容 -->
+  <div class="container">
+    <!-- 左侧导航栏 -->
+    <nav class="sidebar">
+      <ul>
+        <li><a href="#intro">简介</a></li>
+        <li><a href="#project1">作品 1</a></li>
+        <li><a href="#project2">作品 2</a></li>
+        <li><a href="#contact">联系</a></li>
+      </ul>
+    </nav>
+
+    <!-- 中间内容 -->
+    <main class="content">
+      <section id="intro">
+        <h1>个人简介</h1>
+        <p>这里是简介内容...</p>
+      </section>
+
+      <section id="project1">
+        <h2>作品 1</h2>
+        <p>这是第一个作品的介绍...</p>
+      </section>
+
+      <section id="project2">
+        <h2>作品 2</h2>
+        <p>这是第二个作品的介绍...</p>
+      </section>
+
+      <section id="contact">
+        <h2>联系我</h2>
+        <p>Email: example@mail.com</p>
+      </section>
+    </main>
   </div>
 
-  <!-- 作品集 -->
-  <div class="section">
-    <h2>我的作品</h2>
-    <div class="card">
-      <h3>🚀 火箭发动机图像生成</h3>
-      <p>将 CAD 蓝模图转化为高保真渲染图，探索 AI 在工业图像生成中的应用。</p>
-      <a href="https://github.com/yourname/rocket-engine">查看项目 →</a>
-    </div>
-    <div class="card">
-      <h3>🎨 交互式数学可视化</h3>
-      <p>用 WebGL 与 MathBox 做动态几何演示，服务于教学场景。</p>
-      <a href="https://github.com/yourname/math-visualization">查看项目 →</a>
-    </div>
-  </div>
-
-  <!-- 联系方式 -->
-  <div class="section">
-    <h2>联系方式</h2>
-    <p>📧 <a href="mailto:your.email@example.com">your.email@example.com</a></p>
-    <p>🌐 <a href="https://github.com/yourname">GitHub</a> · <a href="https://www.linkedin.com/in/yourname">LinkedIn</a></p>
-  </div>
-
-  <div class="footer">
-    © 2025 by 许慧桦. Built with ❤️ on GitHub Pages.
-  </div>
 </body>
 </html>
