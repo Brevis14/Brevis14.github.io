@@ -1,49 +1,97 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>我的作品集 | Brevis</title>
+  <title>我的作品集 | Notion 风格</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 900px; margin: auto; line-height: 1.6; padding: 20px; }
-    h1, h2 { color: #333; }
-    .project { margin-bottom: 40px; }
-    img { max-width: 100%; border-radius: 8px; }
-    .preview { margin: 10px 0; }
-    a { color: #0070f3; text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #ffffff;
+      color: #37352f;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 2rem;
+    }
+    h1, h2, h3 {
+      font-weight: 600;
+      margin: 1.2rem 0 0.6rem;
+    }
+    h1 {
+      font-size: 2rem;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 0.3rem;
+    }
+    p {
+      margin: 0.5rem 0;
+    }
+    a {
+      color: #3366ff;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .card {
+      border: 1px solid #e5e5e5;
+      border-radius: 6px;
+      padding: 1rem;
+      margin: 1rem 0;
+      transition: 0.2s ease;
+    }
+    .card:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .tag {
+      display: inline-block;
+      background: #f3f3f3;
+      border-radius: 4px;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.8rem;
+      margin-right: 0.5rem;
+      color: #555;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      color: #888;
+    }
   </style>
 </head>
 <body>
-  <h1>👋 你好，我是 Brevis</h1>
-  <p>AI + 美术创作者 | 擅长 Stable Diffusion、ControlNet、数字美术与工业可视化</p>
-
-  <h2>🎨 精选作品</h2>
-
-  <div class="project">
-    <h3>🚀 火箭发动机可视化</h3>
-    <div class="preview">
-      <a href="https://www.bilibili.com/video/BV12dacz1EoM?p=1" target="_blank">
-        <img src="preview1.png" alt="火箭发动机预览">
-      </a>
+  <div class="container">
+    <h1>我的作品集</h1>
+    <p>欢迎来到我的个人网站 👋 这里收录了我在 AI、编程、美术方向上的一些项目与作品。</p>
+    
+    <h2>精选项目</h2>
+    <div class="card">
+      <h3>🚀 火箭发动机图像生成</h3>
+      <p>利用 Stable Diffusion + ControlNet，将 CAD 蓝模图转化为高保真真实渲染图。</p>
+      <span class="tag">AI</span>
+      <span class="tag">生成式图像</span>
+      <p><a href="https://github.com/yourname/rocket-engine">查看项目 →</a></p>
     </div>
-    <p>利用 Stable Diffusion + ControlNet，从蓝模生成真实感火箭发动机图像。<br>
-       <a href="https://www.bilibili.com/video/BV12dacz1EoM?p=1" target="_blank">▶ 点击观看演示视频</a>
-    </p>
-  </div>
 
-  <div class="project">
-    <h3>🖌 插画与风格化生成</h3>
-    <div class="preview">
-      <img src="preview2.png" alt="插画示例">
+    <div class="card">
+      <h3>🎨 交互式数学可视化</h3>
+      <p>基于 MathBox 与 WebGL，实现动态几何与函数可视化，支持交互式教学演示。</p>
+      <span class="tag">前端</span>
+      <span class="tag">数学可视化</span>
+      <p><a href="https://github.com/yourname/math-visualization">查看项目 →</a></p>
     </div>
-    <p>探索 AI 在插画风格迁移中的应用。</p>
+
+    <h2>联系方式</h2>
+    <p>📧 <a href="mailto:your.email@example.com">your.email@example.com</a></p>
+    <p>🌐 <a href="https://github.com/yourname">GitHub</a> · <a href="https://www.linkedin.com/in/yourname">LinkedIn</a></p>
+    
+    <div class="footer">
+      © 2025 by Your Name. Built with ❤️ on GitHub Pages.
+    </div>
   </div>
-
-  <h2>🛠 技能</h2>
-  <p>Stable Diffusion / ControlNet / Photoshop / Blender / ComfyUI</p>
-
-  <h2>📬 联系方式</h2>
-  <p>Email: yourmail@example.com | GitHub: <a href="https://github.com/你的用户名">你的用户名</a></p>
 </body>
 </html>
