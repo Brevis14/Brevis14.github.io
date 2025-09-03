@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>我的作品集 | Notion 风格</title>
+  <title>个人主页 | 许慧桦</title>
   <style>
     body {
       margin: 0;
@@ -12,29 +12,53 @@
       color: #37352f;
       line-height: 1.6;
     }
-    .container {
+    .hero {
+      background: url("https://images.unsplash.com/photo-1503264116251-35a269479413?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80") center/cover no-repeat;
+      height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero h1 {
+      color: white;
+      font-size: 2rem;
+      background: rgba(0,0,0,0.5);
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+    }
+    .intro {
+      display: flex;
+      max-width: 1000px;
+      margin: auto;
+      padding: 2rem;
+      gap: 2rem;
+      align-items: center;
+    }
+    .intro-text {
+      flex: 1;
+    }
+    .intro-text h2 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+    .intro-text p {
+      background: #f7f6f3;
+      padding: 1rem;
+      border-radius: 8px;
+    }
+    .intro img {
+      width: 250px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .section {
       max-width: 900px;
       margin: auto;
       padding: 2rem;
     }
-    h1, h2, h3 {
-      font-weight: 600;
-      margin: 1.2rem 0 0.6rem;
-    }
-    h1 {
-      font-size: 2rem;
-      border-bottom: 2px solid #eee;
-      padding-bottom: 0.3rem;
-    }
-    p {
-      margin: 0.5rem 0;
-    }
-    a {
-      color: #3366ff;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
+    .section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
     }
     .card {
       border: 1px solid #e5e5e5;
@@ -46,52 +70,57 @@
     .card:hover {
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
-    .tag {
-      display: inline-block;
-      background: #f3f3f3;
-      border-radius: 4px;
-      padding: 0.2rem 0.6rem;
-      font-size: 0.8rem;
-      margin-right: 0.5rem;
-      color: #555;
-    }
     .footer {
       text-align: center;
-      margin-top: 3rem;
+      padding: 2rem;
       font-size: 0.9rem;
       color: #888;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>我的作品集</h1>
-    <p>欢迎来到我的个人网站 👋 这里收录了我在 AI、编程、美术方向上的一些项目与作品。</p>
-    
-    <h2>精选项目</h2>
+  <!-- 顶部背景 -->
+  <div class="hero">
+    <h1>Personal Website</h1>
+  </div>
+
+  <!-- 介绍部分 -->
+  <div class="intro">
+    <div class="intro-text">
+      <h2>你好！我是许慧桦 👋</h2>
+      <p>
+        我在读软件工程专业，兼具美术功底与 IT 能力。<br>
+        热衷于探索 AI 图像生成、交互可视化与游戏美术。<br>
+        我相信技术与艺术的结合能够创造兼具功能性与美感的产品。
+      </p>
+    </div>
+    <img src="https://i.imgur.com/8Km9tLL.jpg" alt="个人照片">
+  </div>
+
+  <!-- 作品集 -->
+  <div class="section">
+    <h2>我的作品</h2>
     <div class="card">
       <h3>🚀 火箭发动机图像生成</h3>
-      <p>利用 Stable Diffusion + ControlNet，将 CAD 蓝模图转化为高保真真实渲染图。</p>
-      <span class="tag">AI</span>
-      <span class="tag">生成式图像</span>
-      <p><a href="https://github.com/yourname/rocket-engine">查看项目 →</a></p>
+      <p>将 CAD 蓝模图转化为高保真渲染图，探索 AI 在工业图像生成中的应用。</p>
+      <a href="https://github.com/yourname/rocket-engine">查看项目 →</a>
     </div>
-
     <div class="card">
       <h3>🎨 交互式数学可视化</h3>
-      <p>基于 MathBox 与 WebGL，实现动态几何与函数可视化，支持交互式教学演示。</p>
-      <span class="tag">前端</span>
-      <span class="tag">数学可视化</span>
-      <p><a href="https://github.com/yourname/math-visualization">查看项目 →</a></p>
+      <p>用 WebGL 与 MathBox 做动态几何演示，服务于教学场景。</p>
+      <a href="https://github.com/yourname/math-visualization">查看项目 →</a>
     </div>
+  </div>
 
+  <!-- 联系方式 -->
+  <div class="section">
     <h2>联系方式</h2>
     <p>📧 <a href="mailto:your.email@example.com">your.email@example.com</a></p>
     <p>🌐 <a href="https://github.com/yourname">GitHub</a> · <a href="https://www.linkedin.com/in/yourname">LinkedIn</a></p>
-    
-    <div class="footer">
-      © 2025 by Your Name. Built with ❤️ on GitHub Pages.
-    </div>
+  </div>
+
+  <div class="footer">
+    © 2025 by 许慧桦. Built with ❤️ on GitHub Pages.
   </div>
 </body>
 </html>
