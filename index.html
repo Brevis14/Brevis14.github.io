@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>许慧桦的个人网页</title>
+    <title>个人作品集 | Notion风格</title>
     <!-- 引入Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- 引入Font Awesome -->
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
     
     <!-- 配置Tailwind自定义主题 -->
     <script>
@@ -23,11 +22,11 @@
                             sidebarBg: '#fbfbfa',
                             hover: '#f7f6f3',
                             border: '#e9e9e7',
-                            accent: '#81017e'
+                            accent: '#2eaadc'
                         }
                     },
                     fontFamily: {
-                        sans: ['Noto Sans SC', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
                     },
                 }
             }
@@ -46,18 +45,15 @@
             .notion-transition {
                 transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
             }
-            .img-grid-item {
-                @apply relative overflow-hidden rounded-lg notion-transition;
-            }
-            .img-grid-item:hover {
-                @apply transform scale-[1.01] shadow-md;
+            .img-collage-item {
+                @apply absolute transition-all duration-500 ease-out cursor-pointer overflow-hidden rounded-lg shadow-md;
             }
             .hero-overlay {
-                background: linear-gradient(to right, rgba(255,255,255,0.2), rgba(255,255,255,0));
+                background: linear-gradient(to right, rgba(255,255,255,0.7), rgba(255,255,255,0.5));
             }
             @media (max-width: 767px) {
                 .hero-overlay {
-                    background: rgba(255,255,255,0.9);
+                    background: rgba(255,255,255,0.7);
                 }
             }
         }
@@ -70,24 +66,12 @@
             -webkit-font-smoothing: antialiased;
         }
         
-        /* 图片网格布局 */
-        .masonry-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            grid-gap: 1.5rem;
-            grid-auto-flow: dense;
-        }
-        
-        @media (min-width: 768px) {
-            .masonry-grid {
-                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            }
-            .span-2 {
-                grid-column: span 2;
-            }
-            .span-2-row {
-                grid-row: span 2;
-            }
+        /* 拼贴布局容器 - 扩大区域 */
+        .collage-container {
+            position: relative;
+            width: 100%;
+            min-height: 1200px; /* 扩大高度容纳更多图片 */
+            margin: 0 auto;
         }
         
         /* 图片悬停效果 */
@@ -95,7 +79,7 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
-        .img-grid-item:hover .img-overlay {
+        .img-collage-item:hover .img-overlay {
             opacity: 1;
         }
         
@@ -129,7 +113,153 @@
             position: relative;
             z-index: 10;
         }
-
+        
+        /* 作品详情模态框 */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        
+        .modal-backdrop.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            position: relative;
+            width: 90%;
+            max-width: 900px;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            height: 80vh;
+            max-height: 700px;
+        }
+        
+        .modal-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+            transform-style: preserve-3d;
+        }
+        
+        .modal-front, .modal-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+        }
+        
+        .modal-back {
+            transform: rotateY(180deg);
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        
+        .modal-flipped .modal-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: background-color 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .modal-image-container {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .modal-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .modal-back-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .modal-back-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            z-index: 1;
+        }
+        
+        .work-details h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .work-details .category {
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+        
+        .work-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .work-section h4 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #2eaadc;
+        }
+        
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .collage-container {
+                min-height: 900px;
+            }
+            
+            .modal-content {
+                height: 90vh;
+            }
+            
+            .modal-back {
+                padding: 1.5rem;
+            }
+            
+            .work-details h3 {
+                font-size: 1.5rem;
+            }
+        }
     </style>
 </head>
 
@@ -225,9 +355,9 @@
         
         <!-- 内容容器 -->
         <div class="pt-4 md:pt-8 pb-20 px-4 md:px-8 lg:px-16 max-w-7xl mx-auto">
-            <!-- 首页/英雄区 - 添加了背景图 -->
+            <!-- 首页/英雄区 -->
             <section id="home" class="py-12 md:py-20">
-                <!-- 半透明覆盖层，确保文字可读性 -->
+                <!-- 半透明覆盖层 -->
                 <div class="hero-overlay absolute inset-0"></div>
                 
                 <div class="max-w-3xl mx-auto hero-content">
@@ -279,16 +409,16 @@
                 </div>
             </section>
             
-            <!-- 作品展示 -->
+            <!-- 作品展示 - 更宽松的拼贴堆叠设计 -->
             <section id="work" class="py-12 border-t border-notion-border">
                 <div class="max-w-7xl mx-auto">
                     <h2 class="text-2xl font-bold mb-6">作品展示</h2>
                     <p class="text-notion-lightText mb-8 max-w-3xl">这里是我的精选作品集合，包含摄影、设计和插画等多种形式。每个作品都代表了我对创意的探索和表达。</p>
                     
-                    <!-- 图片网格 - 采用瀑布流布局，实现艺术化排版 -->
-                    <div class="masonry-grid">
-                        <!-- 作品1 -->
-                        <div class="img-grid-item span-2">
+                    <!-- 拼贴布局容器 - 扩大了区域 -->
+                    <div class="collage-container" id="collage-container">
+                        <!-- 作品1 - 左上角位置 -->
+                        <div class="img-collage-item w-72 h-96 top-10 left-[5%] rotate-2 z-10" data-work-id="1">
                             <img src="https://picsum.photos/seed/work1/800/500" alt="山间湖泊风景摄影，展示自然的宁静与壮美" class="w-full h-full object-cover">
                             <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                                 <div class="text-white p-4 text-center">
@@ -298,8 +428,8 @@
                             </div>
                         </div>
                         
-                        <!-- 作品2 -->
-                        <div class="img-grid-item">
+                        <!-- 作品2 - 中上位置 -->
+                        <div class="img-collage-item w-64 h-80 top-40 left-[35%] -rotate-3 z-20" data-work-id="2">
                             <img src="https://picsum.photos/seed/work2/600/800" alt="抽象几何图案设计，使用了明亮的色彩和不规则形状" class="w-full h-full object-cover">
                             <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                                 <div class="text-white p-4 text-center">
@@ -309,8 +439,8 @@
                             </div>
                         </div>
                         
-                        <!-- 作品3 -->
-                        <div class="img-grid-item">
+                        <!-- 作品3 - 右上角位置 -->
+                        <div class="img-collage-item w-60 h-60 top-20 left-[70%] rotate-4 z-10" data-work-id="3">
                             <img src="https://picsum.photos/seed/work3/600/600" alt="城市建筑摄影，捕捉了现代建筑的线条与光影" class="w-full h-full object-cover">
                             <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                                 <div class="text-white p-4 text-center">
@@ -320,8 +450,8 @@
                             </div>
                         </div>
                         
-                        <!-- 作品4 -->
-                        <div class="img-grid-item span-2-row">
+                        <!-- 作品4 - 左中位置 -->
+                        <div class="img-collage-item w-72 h-80 top-150 left-[10%] -rotate-2 z-30" data-work-id="4">
                             <img src="https://picsum.photos/seed/work4/600/1000" alt="水彩风格插画，描绘了森林中的奇幻场景" class="w-full h-full object-cover">
                             <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                                 <div class="text-white p-4 text-center">
@@ -331,8 +461,8 @@
                             </div>
                         </div>
                         
-                        <!-- 作品5 -->
-                        <div class="img-grid-item">
+                        <!-- 作品5 - 中心位置 -->
+                        <div class="img-collage-item w-64 h-96 top-200 left-[40%] rotate-3 z-20" data-work-id="5">
                             <img src="https://picsum.photos/seed/work5/600/400" alt="产品设计摄影，展示了极简风格的日常用品" class="w-full h-full object-cover">
                             <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                                 <div class="text-white p-4 text-center">
@@ -342,8 +472,8 @@
                             </div>
                         </div>
                         
-                        <!-- 作品6 -->
-                        <div class="img-grid-item span-2">
+                        <!-- 作品6 - 右中位置 -->
+                        <div class="img-collage-item w-80 h-64 top-180 left-[65%] -rotate-1 z-10" data-work-id="6">
                             <img src="https://picsum.photos/seed/work6/800/500" alt="街头摄影作品，捕捉了城市生活中的瞬间" class="w-full h-full object-cover">
                             <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                                 <div class="text-white p-4 text-center">
@@ -353,8 +483,8 @@
                             </div>
                         </div>
                         
-                        <!-- 作品7 -->
-                        <div class="img-grid-item">
+                        <!-- 作品7 - 左下位置 -->
+                        <div class="img-collage-item w-64 h-80 top-320 left-[5%] rotate-2 z-20" data-work-id="7">
                             <img src="https://picsum.photos/seed/work7/600/700" alt="数字艺术作品，结合了未来主义元素和自然景观" class="w-full h-full object-cover">
                             <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                                 <div class="text-white p-4 text-center">
@@ -364,8 +494,8 @@
                             </div>
                         </div>
                         
-                        <!-- 作品8 -->
-                        <div class="img-grid-item">
+                        <!-- 作品8 - 中下位置 -->
+                        <div class="img-collage-item w-72 h-72 top-380 left-[35%] -rotate-3 z-30" data-work-id="8">
                             <img src="https://picsum.photos/seed/work8/600/600" alt="传统手工艺摄影，展示了手工艺品的细节和质感" class="w-full h-full object-cover">
                             <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                                 <div class="text-white p-4 text-center">
@@ -374,8 +504,28 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- 作品9 - 新增，右下位置 -->
+                        <div class="img-collage-item w-68 h-88 top-350 left-[65%] rotate-4 z-10" data-work-id="9">
+                            <img src="https://picsum.photos/seed/work9/700/800" alt="人像摄影作品，捕捉人物的情感与个性" class="w-full h-full object-cover">
+                            <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                                <div class="text-white p-4 text-center">
+                                    <h3 class="font-medium mb-1">人物肖像</h3>
+                                    <p class="text-sm text-white text-opacity-80">人像摄影 · 2023</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-        
+                    
+                    <!-- 加载更多按钮 -->
+                    <div class="mt-10 text-center pt-40">
+                        <button class="px-6 py-2 border border-notion-border rounded-md hover:bg-notion-hover notion-transition inline-flex items-center">
+                            加载更多
+                            <i class="fa fa-refresh ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
             
             <!-- 技能 -->
             <section id="skills" class="py-12 border-t border-notion-border">
@@ -566,6 +716,28 @@
         </div>
     </div>
     
+    <!-- 作品详情模态框 -->
+    <div class="modal-backdrop" id="work-modal">
+        <div class="modal-content">
+            <div class="close-modal" id="close-modal">
+                <i class="fa fa-times"></i>
+            </div>
+            <div class="modal-inner" id="modal-inner">
+                <div class="modal-front" id="modal-front">
+                    <div class="modal-image-container">
+                        <img src="" alt="" class="modal-image" id="modal-image">
+                    </div>
+                </div>
+                <div class="modal-back" id="modal-back">
+                    <div class="modal-back-overlay"></div>
+                    <div class="modal-back-content work-details" id="modal-details">
+                        <!-- 作品详情内容将通过JavaScript动态填充 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- 移动端遮罩层 -->
     <div id="overlay" class="fixed inset-0 bg-black bg-opacity-20 z-20 hidden md:hidden"></div>
 
@@ -594,6 +766,246 @@
                     toggleSidebar();
                 }
             });
+        });
+        
+        // 拼贴图片交互效果
+        const collageItems = document.querySelectorAll('.img-collage-item');
+        const collageContainer = document.getElementById('collage-container');
+        
+        // 存储每个图片的原始样式
+        const originalStyles = {};
+        
+        collageItems.forEach((item, index) => {
+            // 保存原始样式
+            originalStyles[index] = {
+                zIndex: item.style.zIndex || getComputedStyle(item).zIndex,
+                transform: item.style.transform || getComputedStyle(item).transform,
+                boxShadow: item.style.boxShadow || getComputedStyle(item).boxShadow
+            };
+            
+            // 鼠标悬停效果 - 悬浮并根据鼠标位置倾斜
+            item.addEventListener('mousemove', (e) => {
+                // 获取元素的位置和尺寸
+                const rect = item.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // 计算鼠标在元素上的相对位置 (0-1范围)
+                const xPos = x / rect.width;
+                const yPos = y / rect.height;
+                
+                // 计算倾斜角度，基于鼠标位置 (-5到5度之间)
+                const rotateX = (yPos - 0.5) * 10;
+                const rotateY = (0.5 - xPos) * 10;
+                
+                // 提升当前元素层级，使其置顶
+                item.style.zIndex = '100';
+                
+                // 应用变换效果
+                item.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+                item.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1)';
+            });
+            
+            // 鼠标离开时恢复原始状态
+            item.addEventListener('mouseleave', () => {
+                item.style.zIndex = originalStyles[index].zIndex;
+                item.style.transform = originalStyles[index].transform;
+                item.style.boxShadow = originalStyles[index].boxShadow;
+            });
+        });
+        
+        // 作品详情模态框功能
+        const modal = document.getElementById('work-modal');
+        const modalImage = document.getElementById('modal-image');
+        const modalDetails = document.getElementById('modal-details');
+        const modalInner = document.getElementById('modal-inner');
+        const closeModal = document.getElementById('close-modal');
+        
+        // 作品详情数据 - 新增了第9个作品的数据
+        const workDetails = {
+            1: {
+                title: "自然系列 - 湖光山色",
+                category: "摄影 · 2023",
+                image: "https://picsum.photos/seed/work1/800/500",
+                tools: "佳能EOS R5, 24-70mm f/2.8镜头, Lightroom",
+                concept: "这组作品旨在捕捉自然景观的宁静与壮美，通过不同时段的光线变化展现山水之间的和谐关系。我希望通过这些照片让观众感受到大自然的治愈力量。",
+                process: "1. 选址与规划 - 研究了多个湖泊景点，选择最佳拍摄时段；2. 拍摄 - 连续三天在不同时段（日出、正午、日落）进行拍摄；3. 后期处理 - 使用Lightroom调整色调和对比度，突出自然色彩；4. 筛选与排版 - 从500多张照片中精选12张组成系列。",
+                收获: "学会了如何利用自然光线创造不同氛围，提高了对构图和色彩的敏感度。同时，这次拍摄让我更加敬畏自然，理解了人与自然的关系。",
+                improvement: "可以尝试更多样化的拍摄角度，增加一些长曝光作品来表现水流和云彩的动态效果。"
+            },
+            2: {
+                title: "几何抽象",
+                category: "设计 · 2023",
+                image: "https://picsum.photos/seed/work2/600/800",
+                tools: "Adobe Illustrator, Procreate",
+                concept: "灵感来源于现代建筑的几何美感，通过抽象的形式和鲜明的色彩对比，探索形状与空间的关系，表达一种简洁而有力的视觉语言。",
+                process: "1. 灵感收集 - 拍摄城市建筑照片作为参考；2. 草图绘制 - 在Procreate上绘制初步构思；3. 数字化 - 使用Illustrator创建矢量图形；4. 色彩实验 - 尝试不同配色方案，确定最终版本；5. 细节调整 - 优化线条和比例，确保视觉平衡。",
+                收获: "深化了对几何构图和色彩理论的理解，提高了矢量图形设计的技能。学会了如何通过简单的形状传达复杂的情感。",
+                improvement: "可以增加更多的动态元素，探索动画效果，使静态作品具有更强的叙事性。"
+            },
+            3: {
+                title: "城市轮廓",
+                category: "摄影 · 2022",
+                image: "https://picsum.photos/seed/work3/600/600",
+                tools: "索尼A7R IV, 16-35mm广角镜头, Photoshop",
+                concept: "通过捕捉城市建筑的线条与光影，展现现代都市的独特魅力。作品聚焦于建筑的几何形态和空间关系，呈现城市的节奏感和生命力。",
+                process: "1. 观察与研究 - 分析不同建筑的结构特点；2. 拍摄计划 - 选择不同时间段和天气条件进行拍摄；3. 实地拍摄 - 尝试多种角度和焦距；4. 后期处理 - 调整对比度和明暗，突出建筑线条；5. 系列整理 - 按主题分类，形成完整系列。",
+                收获: "提高了对建筑形态的观察力和表现力，学会了如何利用广角镜头表现空间感。理解了光线在塑造建筑形态中的关键作用。",
+                improvement: "可以增加一些人文元素，如行人或活动，使建筑作品更具生活气息和故事性。"
+            },
+            4: {
+                title: "森林幻想",
+                category: "插画 · 2023",
+                image: "https://picsum.photos/seed/work4/600/1000",
+                tools: "Procreate, Photoshop, Wacom数位板",
+                concept: "融合现实与幻想，创造一个充满神秘色彩的森林世界。作品试图表达人与自然的和谐关系，以及对未知世界的好奇与探索。",
+                process: "1. 故事构思 - 创想一个奇幻森林的背景故事；2. 角色设计 - 设计森林中的奇幻生物；3. 场景构图 - 绘制多个场景草图；4. 色彩设定 - 确定以绿色和紫色为主的梦幻色调；5. 细节绘制 - 逐步添加细节和纹理；6. 后期调整 - 统一色调，增强氛围。",
+                收获: "提升了数字绘画技巧，特别是水彩风格的表现。学会了如何通过色彩和光影营造特定氛围，增强画面的叙事性。",
+                improvement: "可以增加更多的互动元素和故事线，考虑将系列作品发展成一本插画故事书。"
+            },
+            5: {
+                title: "极简日常",
+                category: "产品摄影 · 2022",
+                image: "https://picsum.photos/seed/work5/600/400",
+                tools: "尼康Z7 II, 85mm微距镜头, 柔光箱",
+                concept: "通过极简主义的视角，展现日常生活用品的美感。作品强调物体的形态、材质和光影关系，让观众重新审视身边平凡事物的价值。",
+                process: "1. 物品选择 - 挑选具有简洁线条的日常用品；2. 场景布置 - 设计简约的背景和构图；3. 灯光设置 - 使用柔光箱创造柔和均匀的光线；4. 拍摄 - 尝试不同角度和焦距；5. 后期处理 - 调整色调，保持自然质感，突出物品细节。",
+                收获: "掌握了产品摄影的布光技巧，学会了如何通过构图和光线突出物体的质感和形态。深化了对极简主义美学的理解。",
+                improvement: "可以尝试更多样化的材质对比，增加一些动态元素，如液体流动或物体运动的瞬间捕捉。"
+            },
+            6: {
+                title: "城市脉搏",
+                category: "街头摄影 · 2023",
+                image: "https://picsum.photos/seed/work6/800/500",
+                tools: "富士X-T4, 35mm定焦镜头",
+                concept: "捕捉城市生活中的瞬间，展现现代都市的活力与多样性。作品聚焦于人与人、人与环境的互动，记录城市的日常节奏和变化。",
+                process: "1. 选址 - 选择城市中具有代表性的地点；2. 观察 - 在每个地点停留足够时间，观察人流和活动；3. 抓拍 - 使用高速快门捕捉自然瞬间；4. 筛选 - 从大量照片中选择最具故事性的作品；5. 后期 - 轻微调整对比度和色调，保持自然感。",
+                收获: "提高了快速反应和构图能力，学会了如何在繁忙的环境中捕捉有意义的瞬间。增强了对城市生活的观察力和敏感度。",
+                improvement: "可以尝试更多的夜间街头摄影，利用城市灯光创造不同的氛围和视觉效果。"
+            },
+            7: {
+                title: "未来自然",
+                category: "数字艺术 · 2023",
+                image: "https://picsum.photos/seed/work7/600/700",
+                tools: "Blender, Photoshop, After Effects",
+                concept: "探索未来科技与自然的融合可能性，创造一个既充满未来感又保留自然元素的世界。作品反思了人类与自然的关系，以及科技发展的方向。",
+                process: "1. 概念构思 - 绘制故事板和草图；2. 3D建模 - 使用Blender创建主要元素；3. 材质与灯光 - 设计未来感的材质和光线效果；4. 合成 - 将3D元素与摄影素材结合；5. 后期处理 - 添加细节和特效，统一整体风格。",
+                收获: "掌握了3D建模和渲染的基本技巧，学会了如何将不同媒介的元素融合成一个统一的作品。深化了对未来主义美学的理解。",
+                improvement: "可以增加动画元素，制作成短片形式，更充分地表达作品的概念和故事。"
+            },
+            8: {
+                title: "匠心之作",
+                category: "工艺摄影 · 2022",
+                image: "https://picsum.photos/seed/work8/600/600",
+                tools: "宾得K-1, 微距镜头, 环形闪光灯",
+                concept: "通过特写镜头展现传统手工艺品的细节和质感，记录匠人的技艺和心血。作品旨在传承和弘扬传统工艺文化，让更多人关注手工艺的价值。",
+                process: "1. 调研 - 走访传统手工艺人，了解工艺过程；2. 物品选择 - 挑选具有代表性的手工艺品；3. 拍摄设置 - 使用微距镜头和环形闪光灯；4. 细节拍摄 - 聚焦于工艺的细节和纹理；5. 访谈记录 - 配合照片记录匠人的故事；6. 后期处理 - 保持自然色彩，突出材质质感。",
+                收获: "提高了微距摄影的技巧，学会了如何通过摄影展现物体的质感和细节。深入了解了传统手工艺的价值和面临的挑战。",
+                improvement: "可以结合视频拍摄，记录手工艺的制作过程，更全面地展现工艺的魅力和匠人的技艺。"
+            },
+            9: {
+                title: "人物肖像",
+                category: "人像摄影 · 2023",
+                image: "https://picsum.photos/seed/work9/700/800",
+                tools: "佳能EOS R6, 50mm f/1.4镜头, 便携式补光灯",
+                concept: "通过捕捉人物的表情和姿态，展现不同个体的独特性格和情感状态。作品试图探索人与镜头之间的关系，以及如何通过肖像传达人物的内心世界。",
+                process: "1. 前期沟通 - 与模特交流，了解其性格特点和期望；2. 场景选择 - 根据人物特点选择合适的拍摄环境；3. 灯光设计 - 设计符合人物气质的光线效果；4. 拍摄引导 - 引导模特自然表达，捕捉真实瞬间；5. 后期处理 - 轻微修饰，保留自然质感，突出人物特征。",
+                收获: "提高了与拍摄对象沟通的能力，学会了如何通过光线和构图突出人物特点。深化了对人像摄影中情感表达的理解。",
+                improvement: "可以尝试更多样化的拍摄风格和后期处理方式，探索不同文化背景下的人像表现。"
+            }
+        };
+        
+        // 打开模态框
+        function openModal(workId) {
+            const work = workDetails[workId];
+            if (!work) return;
+            
+            // 填充模态框内容
+            modalImage.src = work.image;
+            modalImage.alt = work.title;
+            
+            // 填充详情内容
+            modalDetails.innerHTML = `
+                <h3>${work.title}</h3>
+                <span class="category">${work.category}</span>
+                
+                <div class="work-section">
+                    <h4>使用工具</h4>
+                    <p>${work.tools}</p>
+                </div>
+                
+                <div class="work-section">
+                    <h4>设计思路</h4>
+                    <p>${work.concept}</p>
+                </div>
+                
+                <div class="work-section">
+                    <h4>实现步骤</h4>
+                    <p>${work.process}</p>
+                </div>
+                
+                <div class="work-section">
+                    <h4>我的收获</h4>
+                    <p>${work.harvest}</p>
+                </div>
+                
+                <div class="work-section">
+                    <h4>待改进事项</h4>
+                    <p>${work.improvement}</p>
+                </div>
+            `;
+            
+            // 显示模态框
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // 重置翻转状态
+            modalInner.style.transform = 'rotateY(0)';
+            modal.classList.remove('modal-flipped');
+        }
+        
+        // 关闭模态框
+        function closeModalFunc() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        // 翻转模态框
+        function flipModal() {
+            modal.classList.toggle('modal-flipped');
+        }
+        
+        // 为每个作品项添加点击事件
+        collageItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const workId = item.getAttribute('data-work-id');
+                openModal(workId);
+            });
+        });
+        
+        // 关闭模态框事件
+        closeModal.addEventListener('click', closeModalFunc);
+        
+        // 点击模态框背景关闭
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModalFunc();
+            }
+        });
+        
+        // 点击模态框内容区域翻转
+        document.querySelector('.modal-content').addEventListener('click', (e) => {
+            // 避免点击关闭按钮时触发翻转
+            if (e.target !== closeModal && !closeModal.contains(e.target)) {
+                flipModal();
+            }
+        });
+        
+        // 按ESC键关闭模态框
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModalFunc();
+            }
         });
         
         // 图片懒加载实现
