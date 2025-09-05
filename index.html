@@ -1,9 +1,7 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>个人作品集 | Notion风格</title>
+    <title>plkv.works</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     
@@ -12,18 +10,16 @@
             theme: {
                 extend: {
                     colors: {
-                        notion: {
-                            text: '#37352f',
-                            lightText: '#6b7280',
-                            background: '#ffffff',
-                            sidebarBg: '#fbfbfa',
-                            hover: '#f7f6f3',
-                            border: '#e9e9e7',
-                            accent: '#2eaadc'
-                        }
+                        primary: '#000000',
+                        secondary: '#666666',
+                        light: '#d5d1cc',
+                        accent: '#ff3e00',
+                        customGray: '#eae9e5',
+                        customText: '#807d7a'
                     },
                     fontFamily: {
-                        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        sans: ['Inter', 'Helvetica', 'Arial', 'sans-serif'],
+                        display: ['Space Grotesk', 'Helvetica', 'Arial', 'sans-serif']
                     },
                 }
             }
@@ -38,963 +34,434 @@
             .text-balance {
                 text-wrap: balance;
             }
-            .notion-transition {
-                transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            .transition-transform-opacity {
+                transition-property: transform, opacity;
             }
-            .img-collage-item {
-                @apply absolute transition-all duration-500 ease-out cursor-pointer overflow-hidden rounded-lg shadow-md;
+            .nav-link {
+                @apply relative inline-block py-1 overflow-hidden;
             }
-            .hero-overlay {
-                background: linear-gradient(to right, rgba(255,255,255,0.7), rgba(255,255,255,0.5));
+            .nav-link::after {
+                @apply absolute bottom-0 left-0 w-full h-[1px] bg-primary transform scale-x-0 transition-transform duration-300 origin-left;
+                content: '';
             }
-            @media (max-width: 767px) {
-                .hero-overlay {
-                    background: rgba(255,255,255,0.7);
-                }
+            .nav-link:hover::after {
+                @apply transform scale-x-100;
+            }
+            .work-item {
+                @apply relative overflow-hidden cursor-pointer transition-all duration-500;
+            }
+            .work-item:hover .work-overlay {
+                @apply opacity-100;
+            }
+            .work-item:hover img {
+                @apply transform scale-105;
             }
         }
     </style>
     
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
     <style>
-        /* 基础样式 */
-        body {
-            font-feature-settings: "cv02", "cv03", "cv04", "cv11";
-            -webkit-font-smoothing: antialiased;
-        }
-        
-        /* 拼贴布局容器 - 调整高度以适应更紧凑的布局 */
-        .collage-container {
-            position: relative;
-            width: 100%;
-            min-height: 1100px; 
-            margin: 0 auto;
-        }
-        
-        /* 图片悬停效果 */
-        .img-overlay {
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .img-collage-item:hover .img-overlay {
-            opacity: 1;
-        }
-        
-        /* 平滑滚动 */
         html {
             scroll-behavior: smooth;
         }
         
-        /* 加载动画 */
-        .img-loading {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
+        body {
+            font-feature-settings: "liga" 1, "calt" 1;
         }
         
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+        .hero-title {
+            line-height: 0.9;
         }
         
-        /* 首页背景图样式 */
-        #home {
-            position: relative;
-            background-image: url('https://i.postimg.cc/YS4cBn02/00004-4032717414-6.png');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+        .work-overlay {
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent 70%);
         }
         
-        .hero-content {
-            position: relative;
-            z-index: 10;
+        .nav-fixed {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
         
-        /* 作品详情模态框 */
-        .modal-backdrop {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 50;
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        /* Animation classes */
+        .fade-in {
             opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
         }
         
-        .modal-backdrop.active {
+        .fade-in.visible {
             opacity: 1;
-            visibility: visible;
-        }
-        
-        .modal-content {
-            position: relative;
-            width: 90%;
-            max-width: 900px;
-            background-color: white;
-            border-radius: 8px;
-            overflow: hidden;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-            height: 80vh;
-            max-height: 700px;
-        }
-        
-        .modal-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
-            transform-style: preserve-3d;
-        }
-        
-        .modal-front, .modal-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-        }
-        
-        .modal-back {
-            transform: rotateY(180deg);
-            overflow-y: auto;
-            padding: 2rem;
-        }
-        
-        .modal-flipped .modal-inner {
-            transform: rotateY(180deg);
-        }
-        
-        .close-modal {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            z-index: 10;
-            transition: background-color 0.3s ease;
-        }
-        
-        .close-modal:hover {
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-        
-        .modal-image-container {
-            width: 100%;
-            height: 100%;
-        }
-        
-        .modal-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .modal-back-content {
-            position: relative;
-            z-index: 2;
-        }
-        
-        .modal-back-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 70%;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-            z-index: 1;
-        }
-        
-        .work-details h3 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-        }
-        
-        .work-details .category {
-            color: #6b7280;
-            margin-bottom: 1.5rem;
-            display: block;
-        }
-        
-        .work-section {
-            margin-bottom: 1.5rem;
-        }
-        
-        .work-section h4 {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #2eaadc;
-        }
-        
-        /* 移动端适配 */
-        @media (max-width: 768px) {
-            .collage-container {
-                min-height: 900px;
-            }
-            
-            .modal-content {
-                height: 90vh;
-            }
-            
-            .modal-back {
-                padding: 1.5rem;
-            }
-            
-            .work-details h3 {
-                font-size: 1.5rem;
-            }
+            transform: translateY(0);
         }
     </style>
 </head>
-
-<body class="bg-notion-background text-notion-text">
-    <div class="fixed top-0 left-0 h-full w-64 bg-notion-sidebarBg border-r border-notion-border transform -translate-x-full md:translate-x-0 transition-transform duration-300 z-30" id="sidebar">
-        <div class="p-4 border-b border-notion-border">
-            <div class="flex items-center space-x-2">
-                <div class="w-8 h-8 bg-notion-accent rounded-md flex items-center justify-center text-white">
-                    <i class="fa fa-paint-brush"></i>
-                </div>
-                <h1 class="text-lg font-semibold">作品集</h1>
-            </div>
-        </div>
-        
-        <nav class="p-2">
-            <ul class="space-y-1">
-                <li>
-                    <a href="#home" class="flex items-center px-3 py-2 rounded-md bg-notion-hover font-medium notion-transition">
-                        <i class="fa fa-home w-5 text-center mr-2"></i>
-                        <span>首页</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#about" class="flex items-center px-3 py-2 rounded-md hover:bg-notion-hover notion-transition">
-                        <i class="fa fa-user w-5 text-center mr-2"></i>
-                        <span>关于我</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#work" class="flex items-center px-3 py-2 rounded-md hover:bg-notion-hover notion-transition">
-                        <i class="fa fa-th w-5 text-center mr-2"></i>
-                        <span>作品展示</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#skills" class="flex items-center px-3 py-2 rounded-md hover:bg-notion-hover notion-transition">
-                        <i class="fa fa-star w-5 text-center mr-2"></i>
-                        <span>技能</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#contact" class="flex items-center px-3 py-2 rounded-md hover:bg-notion-hover notion-transition">
-                        <i class="fa fa-envelope w-5 text-center mr-2"></i>
-                        <span>联系方式</span>
-                    </a>
-                </li>
-            </ul>
+<body class="bg-customGray text-primary font-sans antialiased">
+    <!-- Navigation -->
+    <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-6 px-6 md:px-12 lg:px-24 bg-customGray/95">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="#" class="text-xl font-display font-medium tracking-tight">faye<span class="text-accent">.</span></a>
             
-            <div class="mt-8 pt-4 border-t border-notion-border">
-                <p class="px-3 text-xs text-notion-lightText uppercase font-medium mb-2">作品分类</p>
-                <ul class="space-y-1">
-                    <li>
-                        <a href="#" class="flex items-center px-3 py-2 rounded-md hover:bg-notion-hover text-sm notion-transition">
-                            <span>全部作品</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="flex items-center px-3 py-2 rounded-md hover:bg-notion-hover text-sm notion-transition">
-                            <span>摄影</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="flex items-center px-3 py-2 rounded-md hover:bg-notion-hover text-sm notion-transition">
-                            <span>设计</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="flex items-center px-3 py-2 rounded-md hover:bg-notion-hover text-sm notion-transition">
-                            <span>插画</span>
-                        </a>
-                    </li>
-                </ul>
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#work" class="nav-link text-sm font-medium">Work</a>
+                <a href="#about" class="nav-link text-sm font-medium">About</a>
+                <a href="#contact" class="nav-link text-sm font-medium">Contact</a>
+                <a href="https://github.com/Brevis14" target="_blank" class="nav-link text-sm font-medium" aria-label="GitHub profile">
+                    <i class="fa fa-github"></i>
+                </a>
+                <a href="mailto:xuhuihua1414@outlook.com" class="nav-link text-sm font-medium" aria-label="Send email">
+                    <i class="fa fa-envelope"></i>
+                </a>
             </div>
-        </nav>
-    </div>
-
-    <div class="md:ml-64 min-h-screen transition-all duration-300" id="main-content">
-        <header class="md:hidden fixed top-0 left-0 right-0 bg-notion-background border-b border-notion-border z-20 px-4 py-3 flex items-center justify-between">
-            <button id="menu-toggle" class="p-2 rounded-md hover:bg-notion-hover">
-                <i class="fa fa-bars"></i>
+            
+            <!-- Mobile menu button -->
+            <button id="mobile-menu-btn" class="md:hidden text-primary focus:outline-none">
+                <i class="fa fa-bars text-xl"></i>
             </button>
-            <div class="flex items-center space-x-2">
-                <div class="w-6 h-6 bg-notion-accent rounded-md flex items-center justify-center text-white text-xs">
-                    <i class="fa fa-paint-brush"></i>
-                </div>
-                <h1 class="text-sm font-semibold">作品集</h1>
-            </div>
-            <div class="w-6"></div> </header>
+        </div>
         
-        <div class="pt-4 md:pt-8 pb-20 px-4 md:px-8 lg:px-16 max-w-7xl mx-auto">
-            <section id="home" class="py-12 md:py-20">
-                <div class="hero-overlay absolute inset-0"></div>
+        <!-- Mobile Navigation -->
+        <div id="mobile-menu" class="md:hidden fixed inset-0 bg-customGray z-50 transform translate-x-full transition-transform duration-300 ease-in-out">
+            <div class="flex justify-end p-6">
+                <button id="close-menu-btn" class="text-primary focus:outline-none">
+                    <i class="fa fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="flex flex-col items-center justify-center h-full space-y-8">
+                <a href="#work" class="text-2xl font-display font-medium mobile-nav-link">Work</a>
+                <a href="#about" class="text-2xl font-display font-medium mobile-nav-link">About</a>
+                <a href="#contact" class="text-2xl font-display font-medium mobile-nav-link">Contact</a>
+                <div class="flex space-x-8 mt-8">
+                    <a href="https://github.com/Brevis14" target="_blank" aria-label="GitHub profile">
+                        <i class="fa fa-github text-2xl"></i>
+                    </a>
+                    <a href="mailto:xuhuihua1414@outlook.com" aria-label="Send email">
+                        <i class="fa fa-envelope text-2xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center px-6 md:px-12 lg:px-24 pt-24 bg-customGray">
+        <div class="max-w-7xl mx-auto w-full">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="hero-title text-[clamp(3rem,12vw,8rem)] font-display font-bold mb-8 leading-none tracking-tighter">
+                    Art &amp;<br>Code<br>Works
+                </h1>
+                <div class="text-customText text-[clamp(1rem,3vw,1.25rem)] mb-12 max-w-2xl mx-auto leading-relaxed">
+                    <p>欢迎来到我的个人主页！这里记录了我一路以来的一些创作与尝试，期待您的欣赏与指点。</p>
+                </div>
+                <a href="#work" class="inline-block group">
+                    <span class="relative overflow-hidden inline-flex items-center">
+                        <span class="text-sm font-medium tracking-wide uppercase py-1">View Work</span>
+                        <span class="ml-3 w-8 h-[1px] bg-primary group-hover:w-12 transition-all duration-300"></span>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Work -->
+    <section id="work" class="py-24 px-6 md:px-12 lg:px-24 bg-light">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16">
+                <div>
+                    <h2 class="text-[clamp(1.5rem,5vw,3rem)] font-display font-bold mb-4">Selected Work</h2>
+                    <p class="text-secondary max-w-xl">A curated selection of recent projects spanning branding, digital design, and creative direction.</p>
+                </div>
+                <div class="mt-6 md:mt-0">
+                    <a href="#" class="nav-link text-sm font-medium">View all projects</a>
+                </div>
+            </div>
+            
+            <!-- Work Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16">
+                <!-- Work Item 1 -->
+                <div class="work-item fade-in">
+                    <div class="relative aspect-[4/5] overflow-hidden rounded-lg">
+                        <img src="https://picsum.photos/seed/work1/800/1000" alt="Project image showing a minimalist website design" class="w-full h-full object-cover transition-transform duration-700 ease-out">
+                        <div class="work-overlay absolute inset-0 opacity-0 transition-opacity duration-300 flex flex-col justify-end p-6">
+                            <span class="text-white/80 text-xs uppercase tracking-wider mb-2">Branding</span>
+                            <h3 class="text-white text-xl font-medium">Nordic Identity</h3>
+                        </div>
+                    </div>
+                </div>
                 
-                <div class="max-w-3xl mx-auto hero-content">
-                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">创意作品集</h1>
-                    <p class="text-xl text-notion-lightText mb-8 text-balance">探索我的创意世界，这里展示了我在设计、摄影和艺术领域的精选作品。</p>
-                    <div class="flex flex-wrap gap-3">
-                        <a href="#work" class="inline-flex items-center px-4 py-2 bg-notion-accent text-white rounded-md hover:bg-opacity-90 notion-transition">
-                            浏览作品
-                            <i class="fa fa-arrow-right ml-2"></i>
-                        </a>
-                        <a href="#contact" class="inline-flex items-center px-4 py-2 border border-notion-border rounded-md hover:bg-notion-hover notion-transition">
-                            联系我
-                        </a>
-                    </div>
-                </div>
-            </section>
-            
-            <section id="about" class="py-12 border-t border-notion-border">
-                <div class="max-w-3xl mx-auto">
-                    <h2 class="text-2xl font-bold mb-6">关于我</h2>
-                    <div class="flex flex-col md:flex-row gap-8 items-start">
-                        <div class="w-full md:w-1/3">
-                            <div class="rounded-lg overflow-hidden aspect-square">
-                                <img src="https://picsum.photos/seed/profile/600/600" alt="个人照片" class="w-full h-full object-cover">
-                            </div>
-                        </div>
-                        <div class="w-full md:w-2/3">
-                            <p class="mb-4">你好！我是一名创意工作者，专注于视觉设计和艺术创作。我热爱通过视觉元素表达想法和情感，探索不同媒介和技术的可能性。</p>
-                            <p class="mb-4">我的创作灵感来源于日常生活、自然景观和文化交流。我相信艺术可以连接不同的人和想法，创造出超越语言的共鸣。</p>
-                            <p>在过去的几年里，我与各种品牌和机构合作，完成了多个创意项目。这个作品集展示了我的创作历程和风格演变。</p>
-                            
-                            <div class="mt-6 flex space-x-4">
-                                <a href="#" class="text-notion-lightText hover:text-notion-text notion-transition">
-                                    <i class="fa fa-instagram text-xl"></i>
-                                </a>
-                                <a href="#" class="text-notion-lightText hover:text-notion-text notion-transition">
-                                    <i class="fa fa-behance text-xl"></i>
-                                </a>
-                                <a href="#" class="text-notion-lightText hover:text-notion-text notion-transition">
-                                    <i class="fa fa-dribbble text-xl"></i>
-                                </a>
-                                <a href="#" class="text-notion-lightText hover:text-notion-text notion-transition">
-                                    <i class="fa fa-github text-xl"></i>
-                                </a>
-                            </div>
+                <!-- Work Item 2 -->
+                <div class="work-item fade-in">
+                    <div class="relative aspect-[4/5] overflow-hidden rounded-lg">
+                        <img src="https://picsum.photos/seed/work2/800/1000" alt="Project image showing a mobile app interface" class="w-full h-full object-cover transition-transform duration-700 ease-out">
+                        <div class="work-overlay absolute inset-0 opacity-0 transition-opacity duration-300 flex flex-col justify-end p-6">
+                            <span class="text-white/80 text-xs uppercase tracking-wider mb-2">UI/UX Design</span>
+                            <h3 class="text-white text-xl font-medium">Pulse App</h3>
                         </div>
                     </div>
                 </div>
-            </section>
-            
-            <section id="work" class="py-12 border-t border-notion-border">
-                <div class="max-w-7xl mx-auto">
-                    <h2 class="text-2xl font-bold mb-6">作品展示</h2>
-                    <p class="text-notion-lightText mb-8 max-w-3xl">这里是我的精选作品集合，包含摄影、设计和插画等多种形式。每个作品都代表了我对创意的探索和表达。</p>
-                    
-                    <div class="collage-container" id="collage-container">
-                        <div class="img-collage-item w-72 h-96 top-10 left-[5%] rotate-2 z-10" data-work-id="1">
-                            <img src="https://picsum.photos/seed/work1/800/500" alt="山间湖泊风景摄影，展示自然的宁静与壮美" class="w-full h-full object-cover">
-                            <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                                <div class="text-white p-4 text-center">
-                                    <h3 class="font-medium mb-1">自然系列 - 湖光山色</h3>
-                                    <p class="text-sm text-white text-opacity-80">摄影 · 2023</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="img-collage-item w-64 h-80 top-20 left-[35%] -rotate-3 z-20" data-work-id="2">
-                            <img src="https://picsum.photos/seed/work2/600/800" alt="抽象几何图案设计，使用了明亮的色彩和不规则形状" class="w-full h-full object-cover">
-                            <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                                <div class="text-white p-4 text-center">
-                                    <h3 class="font-medium mb-1">几何抽象</h3>
-                                    <p class="text-sm text-white text-opacity-80">设计 · 2023</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="img-collage-item w-60 h-60 top-40 left-[68%] rotate-4 z-10" data-work-id="3">
-                            <img src="https://picsum.photos/seed/work3/600/600" alt="城市建筑摄影，捕捉了现代建筑的线条与光影" class="w-full h-full object-cover">
-                            <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                                <div class="text-white p-4 text-center">
-                                    <h3 class="font-medium mb-1">城市轮廓</h3>
-                                    <p class="text-sm text-white text-opacity-80">摄影 · 2022</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="img-collage-item w-72 h-80 top-[350px] left-[15%] -rotate-2 z-30" data-work-id="4">
-                            <img src="https://picsum.photos/seed/work4/600/1000" alt="水彩风格插画，描绘了森林中的奇幻场景" class="w-full h-full object-cover">
-                            <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                                <div class="text-white p-4 text-center">
-                                    <h3 class="font-medium mb-1">森林幻想</h3>
-                                    <p class="text-sm text-white text-opacity-80">插画 · 2023</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="img-collage-item w-64 h-96 top-[380px] left-[48%] rotate-3 z-20" data-work-id="5">
-                            <img src="https://picsum.photos/seed/work5/600/400" alt="产品设计摄影，展示了极简风格的日常用品" class="w-full h-full object-cover">
-                            <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                                <div class="text-white p-4 text-center">
-                                    <h3 class="font-medium mb-1">极简日常</h3>
-                                    <p class="text-sm text-white text-opacity-80">产品摄影 · 2022</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="img-collage-item w-80 h-64 top-[360px] left-[65%] -rotate-1 z-10" data-work-id="6">
-                            <img src="https://picsum.photos/seed/work6/800/500" alt="街头摄影作品，捕捉了城市生活中的瞬间" class="w-full h-full object-cover">
-                            <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                                <div class="text-white p-4 text-center">
-                                    <h3 class="font-medium mb-1">城市脉搏</h3>
-                                    <p class="text-sm text-white text-opacity-80">街头摄影 · 2023</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="img-collage-item w-64 h-80 top-[650px] left-[8%] rotate-2 z-20" data-work-id="7">
-                            <img src="https://picsum.photos/seed/work7/600/700" alt="数字艺术作品，结合了未来主义元素和自然景观" class="w-full h-full object-cover">
-                            <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                                <div class="text-white p-4 text-center">
-                                    <h3 class="font-medium mb-1">未来自然</h3>
-                                    <p class="text-sm text-white text-opacity-80">数字艺术 · 2023</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="img-collage-item w-72 h-72 top-[700px] left-[38%] -rotate-3 z-30" data-work-id="8">
-                            <img src="https://picsum.photos/seed/work8/600/600" alt="传统手工艺摄影，展示了手工艺品的细节和质感" class="w-full h-full object-cover">
-                            <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                                <div class="text-white p-4 text-center">
-                                    <h3 class="font-medium mb-1">匠心之作</h3>
-                                    <p class="text-sm text-white text-opacity-80">工艺摄影 · 2022</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="img-collage-item w-[17rem] h-[22rem] top-[620px] left-[68%] rotate-4 z-10" data-work-id="9">
-                            <img src="https://picsum.photos/seed/work9/700/800" alt="人像摄影作品，捕捉人物的情感与个性" class="w-full h-full object-cover">
-                            <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                                <div class="text-white p-4 text-center">
-                                    <h3 class="font-medium mb-1">人物肖像</h3>
-                                    <p class="text-sm text-white text-opacity-80">人像摄影 · 2023</p>
-                                </div>
-                            </div>
+                
+                <!-- Work Item 3 -->
+                <div class="work-item fade-in">
+                    <div class="relative aspect-[4/5] overflow-hidden rounded-lg">
+                        <img src="https://picsum.photos/seed/work3/800/1000" alt="Project image showing a brand identity system" class="w-full h-full object-cover transition-transform duration-700 ease-out">
+                        <div class="work-overlay absolute inset-0 opacity-0 transition-opacity duration-300 flex flex-col justify-end p-6">
+                            <span class="text-white/80 text-xs uppercase tracking-wider mb-2">Branding</span>
+                            <h3 class="text-white text-xl font-medium">Terra Studio</h3>
                         </div>
                     </div>
                 </div>
-            </section>
-            
-            <section id="skills" class="py-12 border-t border-notion-border">
-                <div class="max-w-3xl mx-auto">
-                    <h2 class="text-2xl font-bold mb-6">我的技能</h2>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="p-5 border border-notion-border rounded-lg hover:bg-notion-hover notion-transition">
-                            <div class="flex items-center mb-4">
-                                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-3">
-                                    <i class="fa fa-camera"></i>
-                                </div>
-                                <h3 class="font-medium">摄影</h3>
-                            </div>
-                            <ul class="space-y-2 text-notion-lightText">
-                                <li class="flex items-center">
-                                    <i class="fa fa-check text-green-500 mr-2"></i>
-                                    <span>风景与自然摄影</span>
-                                </li>
-                                <li class="flex items-center">
-                                    <i class="fa fa-check text-green-500 mr-2"></i>
-                                    <span>人像摄影</span>
-                                </li>
-                                <li class="flex items-center">
-                                    <i class="fa fa-check text-green-500 mr-2"></i>
-                                    <span>产品摄影</span>
-                                </li>
-                                <li class="flex items-center">
-                                    <i class="fa fa-check text-green-500 mr-2"></i>
-                                    <span>街头摄影</span>
-                                </li>
-                            </ul>
-                        </div>
-                        
-                        <div class="p-5 border border-notion-border rounded-lg hover:bg-notion-hover notion-transition">
-                            <div class="flex items-center mb-4">
-                                <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 mr-3">
-                                    <i class="fa fa-paint-brush"></i>
-                                </div>
-                                <h3 class="font-medium">设计</h3>
-                            </div>
-                            <ul class="space-y-2 text-notion-lightText">
-                                <li class="flex items-center">
-                                    <i class="fa fa-check text-green-500 mr-2"></i>
-                                    <span>平面设计</span>
-                                </li>
-                                <li class="flex items-center">
-                                    <i class="fa fa-check text-green-500 mr-2"></i>
-                                    <span>UI/UX设计</span>
-                                </li>
-                                <li class="flex items-center">
-                                    <i class="fa fa-check text-green-500 mr-2"></i>
-                                    <span>品牌标识设计</span>
-                                </li>
-                                <li class="flex items-center">
-                                    <i class="fa fa-check text-green-500 mr-2"></i>
-                                    <span>版式设计</span>
-                                </li>
-                            </ul>
-                        </div>
-                        
-                        <div class="p-5 border border-notion-border rounded-lg hover:bg-notion-hover notion-transition">
-                            <div class="flex items-center mb-4">
-                                <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 mr-3">
-                                    <i class="fa fa-pencil"></i>
-                                </div>
-                                <h3 class="font-medium">插画</h3>
-                            </div>
-                            <ul class="space-y-2 text-notion-lightText">
-                                <li class="flex items-center">
-                                    <i class="fa fa-check text-green-500 mr-2"></i>
-                                    <span>数字插画</span>
-                                </li>
-                                <li class="flex items-center">
-                                    <i class="fa fa-check text-green-500 mr-2"></i>
-                                    <span>水彩风格</span>
-                                </li>
-                                <li class="flex items-center">
-                                    <i class="fa fa-check text-green-500 mr-2"></i>
-                                    <span>矢量插画</span>
-                                </li>
-                                <li class="flex items-center">
-                                    <i class="fa fa-check text-green-500 mr-2"></i>
-                                    <span>概念艺术</span>
-                                </li>
-                            </ul>
-                        </div>
-                        
-                        <div class="p-5 border border-notion-border rounded-lg hover:bg-notion-hover notion-transition">
-                            <div class="flex items-center mb-4">
-                                <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 mr-3">
-                                    <i class="fa fa-laptop"></i>
-                                </div>
-                                <h3 class="font-medium">软件工具</h3>
-                            </div>
-                            <ul class="space-y-2 text-notion-lightText">
-                                <li class="flex items-center">
-                                    <i class="fa fa-check text-green-500 mr-2"></i>
-                                    <span>Adobe Creative Suite</span>
-                                </li>
-                                <li class="flex items-center">
-                                    <i class="fa fa-check text-green-500 mr-2"></i>
-                                    <span>Procreate</span>
-                                </li>
-                                <li class="flex items-center">
-                                    <i class="fa fa-check text-green-500 mr-2"></i>
-                                    <span>Final Cut Pro</span>
-                                </li>
-                                <li class="flex items-center">
-                                    <i class="fa fa-check text-green-500 mr-2"></i>
-                                    <span>Figma</span>
-                                </li>
-                            </ul>
+                
+                <!-- Work Item 4 -->
+                <div class="work-item fade-in">
+                    <div class="relative aspect-[4/5] overflow-hidden rounded-lg">
+                        <img src="https://picsum.photos/seed/work4/800/1000" alt="Project image showing a website redesign" class="w-full h-full object-cover transition-transform duration-700 ease-out">
+                        <div class="work-overlay absolute inset-0 opacity-0 transition-opacity duration-300 flex flex-col justify-end p-6">
+                            <span class="text-white/80 text-xs uppercase tracking-wider mb-2">Web Design</span>
+                            <h3 class="text-white text-xl font-medium">Aequo Website</h3>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 px-6 md:px-12 lg:px-24 bg-customGray">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24 items-center">
+                <div class="fade-in">
+                    <h2 class="text-[clamp(1.5rem,5vw,3rem)] font-display font-bold mb-6">About Me</h2>
+                    <div class="text-secondary mb-8 leading-relaxed space-y-4">
+                        <p>您好！我是许慧桦，英文名是Faye，就读于暨南大学软件工程专业，兼具多年专业美术功底，热衷于探索如何以技术赋能艺术创作。</p>
+                        <p>正如我的名字“慧桦”所寓意，我自小热爱绘画，并在此基础上积极涉猎AI图像生成等前沿技术，曾独立完成教学可视化项目开发，并将AI生图技术应用于实际创作与需求场景。</p>
+                        <p>我对视觉风格与游戏美术有敏锐感知，理想是在大模型与艺术的交汇处，创造出兼具功能性与审美价值的有趣作品。</p>
+                    </div>
+                    <a href="#contact" class="nav-link text-sm font-medium">Get in touch</a>
+                </div>
+                <div class="relative fade-in">
+                    <div class="aspect-square max-w-md mx-auto md:ml-auto rounded-lg overflow-hidden">
+                        <img src="https://picsum.photos/seed/profile/600/600" alt="Portrait of the designer" class="w-full h-full object-cover">
+                    </div>
+                    <div class="absolute -bottom-6 -left-6 w-40 h-40 border-2 border-primary rounded-lg hidden md:block"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="py-24 px-6 md:px-12 lg:px-24 bg-light">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-[clamp(1.5rem,5vw,3rem)] font-display font-bold mb-16 text-center">What I Do</h2>
             
-            <section id="contact" class="py-12 border-t border-notion-border">
-                <div class="max-w-3xl mx-auto">
-                    <h2 class="text-2xl font-bold mb-6">联系我</h2>
-                    <p class="text-notion-lightText mb-8">对我的作品感兴趣？有合作意向？请随时联系我，我会尽快回复。</p>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="bg-customGray p-8 rounded-lg fade-in">
+                    <div class="w-12 h-12 flex items-center justify-center mb-6 border border-primary">
+                        <i class="fa fa-paint-brush text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-display font-medium mb-4">Branding</h3>
+                    <p class="text-secondary">
+                        Creating distinctive brand identities that resonate with your audience and stand out in the market.
+                    </p>
+                </div>
+                
+                <!-- Service 2 -->
+                <div class="bg-customGray p-8 rounded-lg fade-in">
+                    <div class="w-12 h-12 flex items-center justify-center mb-6 border border-primary">
+                        <i class="fa fa-desktop text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-display font-medium mb-4">Digital Design</h3>
+                    <p class="text-secondary">
+                        Crafting intuitive and engaging digital experiences for websites, apps, and other digital platforms.
+                    </p>
+                </div>
+                
+                <!-- Service 3 -->
+                <div class="bg-customGray p-8 rounded-lg fade-in">
+                    <div class="w-12 h-12 flex items-center justify-center mb-6 border border-primary">
+                        <i class="fa fa-lightbulb-o text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-display font-medium mb-4">Creative Direction</h3>
+                    <p class="text-secondary">
+                        Leading creative projects from concept to execution, ensuring a cohesive and impactful result.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-24 px-6 md:px-12 lg:px-24 bg-customGray">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-[clamp(1.5rem,5vw,3rem)] font-display font-bold mb-16 text-center">Client Feedback</h2>
+            
+            <div class="space-y-16">
+                <!-- Testimonial 1 -->
+                <div class="fade-in">
+                    <p class="text-[clamp(1.25rem,3vw,1.75rem)] font-light italic mb-8 leading-relaxed">
+                        "Working with faye was a game-changer for our brand. Their ability to understand our vision and translate it into a cohesive visual identity exceeded our expectations."
+                    </p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+                            <img src="https://picsum.photos/seed/client1/100/100" alt="Client" class="w-full h-full object-cover">
+                        </div>
                         <div>
-                            <form class="space-y-4">
-                                <div>
-                                    <label for="name" class="block text-sm font-medium mb-1">姓名</label>
-                                    <input type="text" id="name" class="w-full px-3 py-2 border border-notion-border rounded-md focus:outline-none focus:ring-1 focus:ring-notion-accent focus:border-notion-accent">
-                                </div>
-                                <div>
-                                    <label for="email" class="block text-sm font-medium mb-1">邮箱</label>
-                                    <input type="email" id="email" class="w-full px-3 py-2 border border-notion-border rounded-md focus:outline-none focus:ring-1 focus:ring-notion-accent focus:border-notion-accent">
-                                </div>
-                                <div>
-                                    <label for="message" class="block text-sm font-medium mb-1">留言</label>
-                                    <textarea id="message" rows="4" class="w-full px-3 py-2 border border-notion-border rounded-md focus:outline-none focus:ring-1 focus:ring-notion-accent focus:border-notion-accent"></textarea>
-                                </div>
-                                <button type="submit" class="w-full md:w-auto px-4 py-2 bg-notion-accent text-white rounded-md hover:bg-opacity-90 notion-transition">
-                                    发送消息
-                                </button>
-                            </form>
-                        </div>
-                        
-                        <div class="flex flex-col justify-between">
-                            <div>
-                                <h3 class="font-medium mb-4">联系方式</h3>
-                                <ul class="space-y-3">
-                                    <li class="flex items-start">
-                                        <i class="fa fa-envelope text-notion-lightText mt-1 mr-3 w-4 text-center"></i>
-                                        <span>contact@example.com</span>
-                                    </li>
-                                    <li class="flex items-start">
-                                        <i class="fa fa-phone text-notion-lightText mt-1 mr-3 w-4 text-center"></i>
-                                        <span>+86 123 4567 8910</span>
-                                    </li>
-                                    <li class="flex items-start">
-                                        <i class="fa fa-map-marker text-notion-lightText mt-1 mr-3 w-4 text-center"></i>
-                                        <span>北京市朝阳区创意园区A座</span>
-                                    </li>
-                                </ul>
-                                
-                                <h3 class="font-medium mt-8 mb-4">社交媒体</h3>
-                                <div class="flex space-x-4">
-                                    <a href="#" class="w-10 h-10 rounded-full border border-notion-border flex items-center justify-center text-notion-lightText hover:bg-notion-hover hover:text-notion-text notion-transition">
-                                        <i class="fa fa-instagram"></i>
-                                    </a>
-                                    <a href="#" class="w-10 h-10 rounded-full border border-notion-border flex items-center justify-center text-notion-lightText hover:bg-notion-hover hover:text-notion-text notion-transition">
-                                        <i class="fa fa-behance"></i>
-                                    </a>
-                                    <a href="#" class="w-10 h-10 rounded-full border border-notion-border flex items-center justify-center text-notion-lightText hover:bg-notion-hover hover:text-notion-text notion-transition">
-                                        <i class="fa fa-dribbble"></i>
-                                    </a>
-                                    <a href="#" class="w-10 h-10 rounded-full border border-notion-border flex items-center justify-center text-notion-lightText hover:bg-notion-hover hover:text-notion-text notion-transition">
-                                        <i class="fa fa-github"></i>
-                                    </a>
-                                </div>
-                            </div>
+                            <h4 class="font-medium">Sarah Johnson</h4>
+                            <p class="text-secondary text-sm">Creative Director, Elevate</p>
                         </div>
                     </div>
                 </div>
-            </section>
-        </div>
-    </div>
-    
-    <div class="modal-backdrop" id="work-modal">
-        <div class="modal-content">
-            <div class="close-modal" id="close-modal">
-                <i class="fa fa-times"></i>
-            </div>
-            <div class="modal-inner" id="modal-inner">
-                <div class="modal-front" id="modal-front">
-                    <div class="modal-image-container">
-                        <img src="" alt="" class="modal-image" id="modal-image">
+                
+                <!-- Testimonial 2 -->
+                <div class="fade-in">
+                    <p class="text-[clamp(1.25rem,3vw,1.75rem)] font-light italic mb-8 leading-relaxed">
+                        "The website redesign captured exactly what we wanted to communicate. The attention to detail and thoughtful approach to user experience has made a significant impact on our business."
+                    </p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+                            <img src="https://picsum.photos/seed/client2/100/100" alt="Client" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-medium">Michael Chen</h4>
+                            <p class="text-secondary text-sm">CEO, Novus Tech</p>
+                        </div>
                     </div>
                 </div>
-                <div class="modal-back" id="modal-back">
-                    <div class="modal-back-overlay"></div>
-                    <div class="modal-back-content work-details" id="modal-details">
-                        </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 px-6 md:px-12 lg:px-24 bg-light">
+        <div class="max-w-7xl mx-auto">
+            <div class="fade-in">
+                <h2 class="text-[clamp(1.5rem,5vw,3rem)] font-display font-bold mb-6">Let's Work Together</h2>
+                <p class="text-secondary mb-8 max-w-md">
+                    如果觉得我们能一起做点有趣的事，期待您的联系！
+                </p>
+                
+                <!-- 横向排列的联系信息 -->
+                <div class="flex flex-wrap gap-8 lg:gap-16">
+                    <!-- Email -->
+                    <div>
+                        <h3 class="text-sm uppercase tracking-wider text-secondary mb-2">Email</h3>
+                        <a href="mailto:xuhuihua1414@outlook.com" class="text-lg font-medium hover:underline transition-colors">xuhuihua1414@outlook.com</a>
+                    </div>
+                    
+                    <!-- GitHub -->
+                    <div>
+                        <h3 class="text-sm uppercase tracking-wider text-secondary mb-2">GitHub</h3>
+                        <a href="https://github.com/Brevis14" target="_blank" class="text-lg font-medium hover:underline transition-colors">github.com/Brevis14</a>
+                    </div>
+                    
+                    <!-- Base -->
+                    <div>
+                        <h3 class="text-sm uppercase tracking-wider text-secondary mb-2">Base</h3>
+                        <p class="text-lg font-medium">广州、深圳、东莞</p>
+                    </div>
+                    
+                    <!-- Wechat -->
+                    <div>
+                        <h3 class="text-sm uppercase tracking-wider text-secondary mb-2">Wechat</h3>
+                        <p class="text-lg font-medium">_faye_14</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    
-    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-20 z-20 hidden md:hidden"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 px-6 md:px-12 lg:px-24 border-t border-gray-200 bg-customGray">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
+            <a href="#" class="text-xl font-display font-medium tracking-tight mb-6 md:mb-0">faye<span class="text-accent">.</span></a>
+            
+            <div class="flex flex-col md:flex-row items-center md:space-x-8 space-y-4 md:space-y-0">
+                <p class="text-secondary text-sm">© 2023 All rights reserved</p>
+                <a href="#" class="text-secondary text-sm hover:text-primary transition-colors">Privacy Policy</a>
+                <a href="#" class="text-secondary text-sm hover:text-primary transition-colors">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        // 侧边栏切换功能
-        const menuToggle = document.getElementById('menu-toggle');
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
-        const mainContent = document.getElementById('main-content');
-        const sidebarLinks = document.querySelectorAll('#sidebar a');
-        
-        // 切换侧边栏显示/隐藏
-        function toggleSidebar() {
-            sidebar.classList.toggle('-translate-x-full');
-            overlay.classList.toggle('hidden');
-            document.body.classList.toggle('overflow-hidden');
-        }
-        
-        menuToggle.addEventListener('click', toggleSidebar);
-        overlay.addEventListener('click', toggleSidebar);
-        
-        // 点击侧边栏链接后关闭侧边栏（仅在移动设备）
-        sidebarLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth < 768) {
-                    toggleSidebar();
-                }
-            });
-        });
-        
-        // 拼贴图片交互效果
-        const collageItems = document.querySelectorAll('.img-collage-item');
-        const collageContainer = document.getElementById('collage-container');
-        
-        // 存储每个图片的原始样式
-        const originalStyles = {};
-        
-        collageItems.forEach((item, index) => {
-            // 保存原始样式
-            originalStyles[index] = {
-                zIndex: item.style.zIndex || getComputedStyle(item).zIndex,
-                transform: item.style.transform || getComputedStyle(item).transform,
-                boxShadow: item.style.boxShadow || getComputedStyle(item).boxShadow
-            };
-            
-            // 鼠标悬停效果 - 悬浮并根据鼠标位置倾斜
-            item.addEventListener('mousemove', (e) => {
-                // 获取元素的位置和尺寸
-                const rect = item.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                // 计算鼠标在元素上的相对位置 (0-1范围)
-                const xPos = x / rect.width;
-                const yPos = y / rect.height;
-                
-                // 计算倾斜角度，基于鼠标位置 (-5到5度之间)
-                const rotateX = (yPos - 0.5) * 10;
-                const rotateY = (0.5 - xPos) * 10;
-                
-                // 提升当前元素层级，使其置顶
-                item.style.zIndex = '100';
-                
-                // 应用变换效果
-                item.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
-                item.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1)';
-            });
-            
-            // 鼠标离开时恢复原始状态
-            item.addEventListener('mouseleave', () => {
-                item.style.zIndex = originalStyles[index].zIndex;
-                item.style.transform = originalStyles[index].transform;
-                item.style.boxShadow = originalStyles[index].boxShadow;
-            });
-        });
-        
-        // 作品详情模态框功能
-        const modal = document.getElementById('work-modal');
-        const modalImage = document.getElementById('modal-image');
-        const modalDetails = document.getElementById('modal-details');
-        const modalInner = document.getElementById('modal-inner');
-        const closeModal = document.getElementById('close-modal');
-        
-        // 作品详情数据
-        const workDetails = {
-            1: {
-                title: "自然系列 - 湖光山色",
-                category: "摄影 · 2023",
-                image: "https://picsum.photos/seed/work1/800/500",
-                tools: "佳能EOS R5, 24-70mm f/2.8镜头, Lightroom",
-                concept: "这组作品旨在捕捉自然景观的宁静与壮美，通过不同时段的光线变化展现山水之间的和谐关系。我希望通过这些照片让观众感受到大自然的治愈力量。",
-                process: "1. 选址与规划 - 研究了多个湖泊景点，选择最佳拍摄时段；2. 拍摄 - 连续三天在不同时段（日出、正午、日落）进行拍摄；3. 后期处理 - 使用Lightroom调整色调和对比度，突出自然色彩；4. 筛选与排版 - 从500多张照片中精选12张组成系列。",
-                收获: "学会了如何利用自然光线创造不同氛围，提高了对构图和色彩的敏感度。同时，这次拍摄让我更加敬畏自然，理解了人与自然的关系。",
-                improvement: "可以尝试更多样化的拍摄角度，增加一些长曝光作品来表现水流和云彩的动态效果。"
-            },
-            2: {
-                title: "几何抽象",
-                category: "设计 · 2023",
-                image: "https://picsum.photos/seed/work2/600/800",
-                tools: "Adobe Illustrator, Procreate",
-                concept: "灵感来源于现代建筑的几何美感，通过抽象的形式和鲜明的色彩对比，探索形状与空间的关系，表达一种简洁而有力的视觉语言。",
-                process: "1. 灵感收集 - 拍摄城市建筑照片作为参考；2. 草图绘制 - 在Procreate上绘制初步构思；3. 数字化 - 使用Illustrator创建矢量图形；4. 色彩实验 - 尝试不同配色方案，确定最终版本；5. 细节调整 - 优化线条和比例，确保视觉平衡。",
-                收获: "深化了对几何构图和色彩理论的理解，提高了矢量图形设计的技能。学会了如何通过简单的形状传达复杂的情感。",
-                improvement: "可以增加更多的动态元素，探索动画效果，使静态作品具有更强的叙事性。"
-            },
-            3: {
-                title: "城市轮廓",
-                category: "摄影 · 2022",
-                image: "https://picsum.photos/seed/work3/600/600",
-                tools: "索尼A7R IV, 16-35mm广角镜头, Photoshop",
-                concept: "通过捕捉城市建筑的线条与光影，展现现代都市的独特魅力。作品聚焦于建筑的几何形态和空间关系，呈现城市的节奏感和生命力。",
-                process: "1. 观察与研究 - 分析不同建筑的结构特点；2. 拍摄计划 - 选择不同时间段和天气条件进行拍摄；3. 实地拍摄 - 尝试多种角度和焦距；4. 后期处理 - 调整对比度和明暗，突出建筑线条；5. 系列整理 - 按主题分类，形成完整系列。",
-                收获: "提高了对建筑形态的观察力和表现力，学会了如何利用广角镜头表现空间感。理解了光线在塑造建筑形态中的关键作用。",
-                improvement: "可以增加一些人文元素，如行人或活动，使建筑作品更具生活气息和故事性。"
-            },
-            4: {
-                title: "森林幻想",
-                category: "插画 · 2023",
-                image: "https://picsum.photos/seed/work4/600/1000",
-                tools: "Procreate, Photoshop, Wacom数位板",
-                concept: "融合现实与幻想，创造一个充满神秘色彩的森林世界。作品试图表达人与自然的和谐关系，以及对未知世界的好奇与探索。",
-                process: "1. 故事构思 - 创想一个奇幻森林的背景故事；2. 角色设计 - 设计森林中的奇幻生物；3. 场景构图 - 绘制多个场景草图；4. 色彩设定 - 确定以绿色和紫色为主的梦幻色调；5. 细节绘制 - 逐步添加细节和纹理；6. 后期调整 - 统一色调，增强氛围。",
-                收获: "提升了数字绘画技巧，特别是水彩风格的表现。学会了如何通过色彩和光影营造特定氛围，增强画面的叙事性。",
-                improvement: "可以增加更多的互动元素和故事线，考虑将系列作品发展成一本插画故事书。"
-            },
-            5: {
-                title: "极简日常",
-                category: "产品摄影 · 2022",
-                image: "https://picsum.photos/seed/work5/600/400",
-                tools: "尼康Z7 II, 85mm微距镜头, 柔光箱",
-                concept: "通过极简主义的视角，展现日常生活用品的美感。作品强调物体的形态、材质和光影关系，让观众重新审视身边平凡事物的价值。",
-                process: "1. 物品选择 - 挑选具有简洁线条的日常用品；2. 场景布置 - 设计简约的背景和构图；3. 灯光设置 - 使用柔光箱创造柔和均匀的光线；4. 拍摄 - 尝试不同角度和焦距；5. 后期处理 - 调整色调，保持自然质感，突出物品细节。",
-                收获: "掌握了产品摄影的布光技巧，学会了如何通过构图和光线突出物体的质感和形态。深化了对极简主义美学的理解。",
-                improvement: "可以尝试更多样化的材质对比，增加一些动态元素，如液体流动或物体运动的瞬间捕捉。"
-            },
-            6: {
-                title: "城市脉搏",
-                category: "街头摄影 · 2023",
-                image: "https://picsum.photos/seed/work6/800/500",
-                tools: "富士X-T4, 35mm定焦镜头",
-                concept: "捕捉城市生活中的瞬间，展现现代都市的活力与多样性。作品聚焦于人与人、人与环境的互动，记录城市的日常节奏和变化。",
-                process: "1. 选址 - 选择城市中具有代表性的地点；2. 观察 - 在每个地点停留足够时间，观察人流和活动；3. 抓拍 - 使用高速快门捕捉自然瞬间；4. 筛选 - 从大量照片中选择最具故事性的作品；5. 后期 - 轻微调整对比度和色调，保持自然感。",
-                收获: "提高了快速反应和构图能力，学会了如何在繁忙的环境中捕捉有意义的瞬间。增强了对城市生活的观察力和敏感度。",
-                improvement: "可以尝试更多的夜间街头摄影，利用城市灯光创造不同的氛围和视觉效果。"
-            },
-            7: {
-                title: "未来自然",
-                category: "数字艺术 · 2023",
-                image: "https://picsum.photos/seed/work7/600/700",
-                tools: "Blender, Photoshop, After Effects",
-                concept: "探索未来科技与自然的融合可能性，创造一个既充满未来感又保留自然元素的世界。作品反思了人类与自然的关系，以及科技发展的方向。",
-                process: "1. 概念构思 - 绘制故事板和草图；2. 3D建模 - 使用Blender创建主要元素；3. 材质与灯光 - 设计未来感的材质和光线效果；4. 合成 - 将3D元素与摄影素材结合；5. 后期处理 - 添加细节和特效，统一整体风格。",
-                收获: "掌握了3D建模和渲染的基本技巧，学会了如何将不同媒介的元素融合成一个统一的作品。深化了对未来主义美学的理解。",
-                improvement: "可以增加动画元素，制作成短片形式，更充分地表达作品的概念和故事。"
-            },
-            8: {
-                title: "匠心之作",
-                category: "工艺摄影 · 2022",
-                image: "https://picsum.photos/seed/work8/600/600",
-                tools: "宾得K-1, 微距镜头, 环形闪光灯",
-                concept: "通过特写镜头展现传统手工艺品的细节和质感，记录匠人的技艺和心血。作品旨在传承和弘扬传统工艺文化，让更多人关注手工艺的价值。",
-                process: "1. 调研 - 走访传统手工艺人，了解工艺过程；2. 物品选择 - 挑选具有代表性的手工艺品；3. 拍摄设置 - 使用微距镜头和环形闪光灯；4. 细节拍摄 - 聚焦于工艺的细节和纹理；5. 访谈记录 - 配合照片记录匠人的故事；6. 后期处理 - 保持自然色彩，突出材质质感。",
-                收获: "提高了微距摄影的技巧，学会了如何通过摄影展现物体的质感和细节。深入了解了传统手工艺的价值和面临的挑战。",
-                improvement: "可以结合视频拍摄，记录手工艺的制作过程，更全面地展现工艺的魅力和匠人的技艺。"
-            },
-            9: {
-                title: "人物肖像",
-                category: "人像摄影 · 2023",
-                image: "https://picsum.photos/seed/work9/700/800",
-                tools: "佳能EOS R6, 50mm f/1.4镜头, 便携式补光灯",
-                concept: "通过捕捉人物的表情和姿态，展现不同个体的独特性格和情感状态。作品试图探索人与镜头之间的关系，以及如何通过肖像传达人物的内心世界。",
-                process: "1. 前期沟通 - 与模特交流，了解其性格特点和期望；2. 场景选择 - 根据人物特点选择合适的拍摄环境；3. 灯光设计 - 设计符合人物气质的光线效果；4. 拍摄引导 - 引导模特自然表达，捕捉真实瞬间；5. 后期处理 - 轻微修饰，保留自然质感，突出人物特征。",
-                收获: "提高了与拍摄对象沟通的能力，学会了如何通过光线和构图突出人物特点。深化了对人像摄影中情感表达的理解。",
-                improvement: "可以尝试更多样化的拍摄风格和后期处理方式，探索不同文化背景下的人像表现。"
+        // Navigation scroll effect
+        const nav = document.getElementById('main-nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                nav.classList.add('py-4', 'bg-customGray/90', 'nav-fixed', 'shadow-sm');
+                nav.classList.remove('py-6');
+            } else {
+                nav.classList.add('py-6');
+                nav.classList.remove('py-4', 'bg-customGray/90', 'nav-fixed', 'shadow-sm');
             }
-        };
+        });
         
-        // 打开模态框
-        function openModal(workId) {
-            const work = workDetails[workId];
-            if (!work) return;
-            
-            // 填充模态框内容
-            modalImage.src = work.image;
-            modalImage.alt = work.title;
-            
-            // 填充详情内容
-            modalDetails.innerHTML = `
-                <h3>${work.title}</h3>
-                <span class="category">${work.category}</span>
-                
-                <div class="work-section">
-                    <h4>使用工具</h4>
-                    <p>${work.tools}</p>
-                </div>
-                
-                <div class="work-section">
-                    <h4>设计思路</h4>
-                    <p>${work.concept}</p>
-                </div>
-                
-                <div class="work-section">
-                    <h4>实现步骤</h4>
-                    <p>${work.process}</p>
-                </div>
-                
-                <div class="work-section">
-                    <h4>我的收获</h4>
-                    <p>${work.收获}</p>
-                </div>
-                
-                <div class="work-section">
-                    <h4>待改进事项</h4>
-                    <p>${work.improvement}</p>
-                </div>
-            `;
-            
-            // 显示模态框
-            modal.classList.add('active');
+        // Mobile menu functionality
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('translate-x-full');
             document.body.style.overflow = 'hidden';
-            
-            // 重置翻转状态
-            modalInner.style.transform = 'rotateY(0)';
-            modal.classList.remove('modal-flipped');
-        }
+        });
         
-        // 关闭模态框
-        function closeModalFunc() {
-            modal.classList.remove('active');
+        function closeMenu() {
+            mobileMenu.classList.add('translate-x-full');
             document.body.style.overflow = '';
         }
         
-        // 翻转模态框
-        function flipModal() {
-            modal.classList.toggle('modal-flipped');
-        }
+        closeMenuBtn.addEventListener('click', closeMenu);
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
         
-        // 为每个作品项添加点击事件
-        collageItems.forEach(item => {
-            item.addEventListener('click', () => {
-                const workId = item.getAttribute('data-work-id');
-                openModal(workId);
+        // Scroll animation
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        const fadeInObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    fadeInObserver.unobserve(entry.target);
+                }
             });
+        }, {
+            threshold: 0.1
         });
         
-        // 关闭模态框事件
-        closeModal.addEventListener('click', closeModalFunc);
-        
-        // 点击模态框背景关闭
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeModalFunc();
-            }
+        fadeElements.forEach(element => {
+            fadeInObserver.observe(element);
         });
         
-        // 点击模态框内容区域翻转
-        document.querySelector('.modal-content').addEventListener('click', (e) => {
-            // 避免点击关闭按钮时触发翻转
-            if (e.target !== closeModal && !closeModal.contains(e.target)) {
-                flipModal();
-            }
-        });
-        
-        // 按ESC键关闭模态框
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modal.classList.contains('active')) {
-                closeModalFunc();
-            }
-        });
-        
-        // 图片懒加载实现
-        document.addEventListener('DOMContentLoaded', () => {
-            const images = document.querySelectorAll('img');
-            
-            const imgOptions = {
-                threshold: 0.1,
-                rootMargin: "0px 0px 100px 0px"
-            };
-            
-            const imgObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (!entry.isIntersecting) {
-                        return;
-                    } else {
-                        entry.target.classList.add('opacity-100');
-                        entry.target.classList.remove('opacity-0');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, imgOptions);
-            
-            images.forEach(image => {
-                imgObserver.observe(image);
-                image.classList.add('opacity-0', 'transition-opacity', 'duration-500');
-            });
+        // Stagger animation for grid items
+        const workItems = document.querySelectorAll('.work-item');
+        workItems.forEach((item, index) => {
+            item.style.transitionDelay = `${index * 100}ms`;
         });
     </script>
-</body>
-</html>
+
+
+    </body></html>
     
