@@ -4,12 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>个人作品集 | Notion风格</title>
-    <!-- 引入Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 引入Font Awesome -->
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     
-    <!-- 配置Tailwind自定义主题 -->
     <script>
         tailwind.config = {
             theme: {
@@ -33,7 +30,6 @@
         }
     </script>
     
-    <!-- 自定义工具类 -->
     <style type="text/tailwindcss">
         @layer utilities {
             .content-auto {
@@ -264,7 +260,6 @@
 </head>
 
 <body class="bg-notion-background text-notion-text">
-    <!-- 侧边导航栏 - 在移动设备上转为顶部导航 -->
     <div class="fixed top-0 left-0 h-full w-64 bg-notion-sidebarBg border-r border-notion-border transform -translate-x-full md:translate-x-0 transition-transform duration-300 z-30" id="sidebar">
         <div class="p-4 border-b border-notion-border">
             <div class="flex items-center space-x-2">
@@ -337,9 +332,7 @@
         </nav>
     </div>
 
-    <!-- 主内容区 -->
     <div class="md:ml-64 min-h-screen transition-all duration-300" id="main-content">
-        <!-- 顶部导航栏 - 仅在移动设备显示 -->
         <header class="md:hidden fixed top-0 left-0 right-0 bg-notion-background border-b border-notion-border z-20 px-4 py-3 flex items-center justify-between">
             <button id="menu-toggle" class="p-2 rounded-md hover:bg-notion-hover">
                 <i class="fa fa-bars"></i>
@@ -350,14 +343,10 @@
                 </div>
                 <h1 class="text-sm font-semibold">作品集</h1>
             </div>
-            <div class="w-6"></div> <!-- 占位元素，保持标题居中 -->
-        </header>
+            <div class="w-6"></div> </header>
         
-        <!-- 内容容器 -->
         <div class="pt-4 md:pt-8 pb-20 px-4 md:px-8 lg:px-16 max-w-7xl mx-auto">
-            <!-- 首页/英雄区 -->
             <section id="home" class="py-12 md:py-20">
-                <!-- 半透明覆盖层 -->
                 <div class="hero-overlay absolute inset-0"></div>
                 
                 <div class="max-w-3xl mx-auto hero-content">
@@ -375,7 +364,6 @@
                 </div>
             </section>
             
-            <!-- 关于我 -->
             <section id="about" class="py-12 border-t border-notion-border">
                 <div class="max-w-3xl mx-auto">
                     <h2 class="text-2xl font-bold mb-6">关于我</h2>
@@ -409,15 +397,12 @@
                 </div>
             </section>
             
-            <!-- 作品展示 - 更宽松的拼贴堆叠设计 -->
             <section id="work" class="py-12 border-t border-notion-border">
                 <div class="max-w-7xl mx-auto">
                     <h2 class="text-2xl font-bold mb-6">作品展示</h2>
                     <p class="text-notion-lightText mb-8 max-w-3xl">这里是我的精选作品集合，包含摄影、设计和插画等多种形式。每个作品都代表了我对创意的探索和表达。</p>
                     
-                    <!-- 拼贴布局容器 - 扩大了区域 -->
                     <div class="collage-container" id="collage-container">
-                        <!-- 作品1 - 左上角位置 -->
                         <div class="img-collage-item w-72 h-96 top-10 left-[5%] rotate-2 z-10" data-work-id="1">
                             <img src="https://picsum.photos/seed/work1/800/500" alt="山间湖泊风景摄影，展示自然的宁静与壮美" class="w-full h-full object-cover">
                             <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
@@ -428,8 +413,7 @@
                             </div>
                         </div>
                         
-                        <!-- 作品2 - 中上位置 -->
-                        <div class="img-collage-item w-64 h-80 top-40 left-[35%] -rotate-3 z-20" data-work-id="2">
+                        <div class="img-collage-item w-64 h-80 top-20 left-[40%] -rotate-3 z-20" data-work-id="2">
                             <img src="https://picsum.photos/seed/work2/600/800" alt="抽象几何图案设计，使用了明亮的色彩和不规则形状" class="w-full h-full object-cover">
                             <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                                 <div class="text-white p-4 text-center">
@@ -439,8 +423,7 @@
                             </div>
                         </div>
                         
-                        <!-- 作品3 - 右上角位置 -->
-                        <div class="img-collage-item w-60 h-60 top-20 left-[70%] rotate-4 z-10" data-work-id="3">
+                        <div class="img-collage-item w-60 h-60 top-24 left-[75%] rotate-4 z-10" data-work-id="3">
                             <img src="https://picsum.photos/seed/work3/600/600" alt="城市建筑摄影，捕捉了现代建筑的线条与光影" class="w-full h-full object-cover">
                             <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                                 <div class="text-white p-4 text-center">
@@ -450,8 +433,7 @@
                             </div>
                         </div>
                         
-                        <!-- 作品4 - 左中位置 -->
-                        <div class="img-collage-item w-72 h-80 top-150 left-[10%] -rotate-2 z-30" data-work-id="4">
+                        <div class="img-collage-item w-72 h-80 top-[420px] left-[15%] -rotate-2 z-30" data-work-id="4">
                             <img src="https://picsum.photos/seed/work4/600/1000" alt="水彩风格插画，描绘了森林中的奇幻场景" class="w-full h-full object-cover">
                             <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                                 <div class="text-white p-4 text-center">
@@ -461,8 +443,7 @@
                             </div>
                         </div>
                         
-                        <!-- 作品5 - 中心位置 -->
-                        <div class="img-collage-item w-64 h-96 top-200 left-[40%] rotate-3 z-20" data-work-id="5">
+                        <div class="img-collage-item w-64 h-96 top-[500px] left-[45%] rotate-3 z-20" data-work-id="5">
                             <img src="https://picsum.photos/seed/work5/600/400" alt="产品设计摄影，展示了极简风格的日常用品" class="w-full h-full object-cover">
                             <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                                 <div class="text-white p-4 text-center">
@@ -472,8 +453,7 @@
                             </div>
                         </div>
                         
-                        <!-- 作品6 - 右中位置 -->
-                        <div class="img-collage-item w-80 h-64 top-180 left-[65%] -rotate-1 z-10" data-work-id="6">
+                        <div class="img-collage-item w-80 h-64 top-[480px] left-[70%] -rotate-1 z-10" data-work-id="6">
                             <img src="https://picsum.photos/seed/work6/800/500" alt="街头摄影作品，捕捉了城市生活中的瞬间" class="w-full h-full object-cover">
                             <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                                 <div class="text-white p-4 text-center">
@@ -483,8 +463,7 @@
                             </div>
                         </div>
                         
-                        <!-- 作品7 - 左下位置 -->
-                        <div class="img-collage-item w-64 h-80 top-320 left-[5%] rotate-2 z-20" data-work-id="7">
+                        <div class="img-collage-item w-64 h-80 top-[780px] left-[8%] rotate-2 z-20" data-work-id="7">
                             <img src="https://picsum.photos/seed/work7/600/700" alt="数字艺术作品，结合了未来主义元素和自然景观" class="w-full h-full object-cover">
                             <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                                 <div class="text-white p-4 text-center">
@@ -494,8 +473,7 @@
                             </div>
                         </div>
                         
-                        <!-- 作品8 - 中下位置 -->
-                        <div class="img-collage-item w-72 h-72 top-380 left-[35%] -rotate-3 z-30" data-work-id="8">
+                        <div class="img-collage-item w-72 h-72 top-[900px] left-[38%] -rotate-3 z-30" data-work-id="8">
                             <img src="https://picsum.photos/seed/work8/600/600" alt="传统手工艺摄影，展示了手工艺品的细节和质感" class="w-full h-full object-cover">
                             <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                                 <div class="text-white p-4 text-center">
@@ -505,8 +483,7 @@
                             </div>
                         </div>
                         
-                        <!-- 作品9 - 新增，右下位置 -->
-                        <div class="img-collage-item w-68 h-88 top-350 left-[65%] rotate-4 z-10" data-work-id="9">
+                        <div class="img-collage-item w-[17rem] h-[22rem] top-[820px] left-[68%] rotate-4 z-10" data-work-id="9">
                             <img src="https://picsum.photos/seed/work9/700/800" alt="人像摄影作品，捕捉人物的情感与个性" class="w-full h-full object-cover">
                             <div class="img-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                                 <div class="text-white p-4 text-center">
@@ -517,8 +494,7 @@
                         </div>
                     </div>
                     
-                    <!-- 加载更多按钮 -->
-                    <div class="mt-10 text-center pt-40">
+                    <div class="mt-10 text-center pt-20">
                         <button class="px-6 py-2 border border-notion-border rounded-md hover:bg-notion-hover notion-transition inline-flex items-center">
                             加载更多
                             <i class="fa fa-refresh ml-2"></i>
@@ -527,13 +503,11 @@
                 </div>
             </section>
             
-            <!-- 技能 -->
             <section id="skills" class="py-12 border-t border-notion-border">
                 <div class="max-w-3xl mx-auto">
                     <h2 class="text-2xl font-bold mb-6">我的技能</h2>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- 技能类别1 -->
                         <div class="p-5 border border-notion-border rounded-lg hover:bg-notion-hover notion-transition">
                             <div class="flex items-center mb-4">
                                 <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-3">
@@ -561,7 +535,6 @@
                             </ul>
                         </div>
                         
-                        <!-- 技能类别2 -->
                         <div class="p-5 border border-notion-border rounded-lg hover:bg-notion-hover notion-transition">
                             <div class="flex items-center mb-4">
                                 <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 mr-3">
@@ -589,7 +562,6 @@
                             </ul>
                         </div>
                         
-                        <!-- 技能类别3 -->
                         <div class="p-5 border border-notion-border rounded-lg hover:bg-notion-hover notion-transition">
                             <div class="flex items-center mb-4">
                                 <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 mr-3">
@@ -617,7 +589,6 @@
                             </ul>
                         </div>
                         
-                        <!-- 技能类别4 -->
                         <div class="p-5 border border-notion-border rounded-lg hover:bg-notion-hover notion-transition">
                             <div class="flex items-center mb-4">
                                 <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 mr-3">
@@ -648,7 +619,6 @@
                 </div>
             </section>
             
-            <!-- 联系方式 -->
             <section id="contact" class="py-12 border-t border-notion-border">
                 <div class="max-w-3xl mx-auto">
                     <h2 class="text-2xl font-bold mb-6">联系我</h2>
@@ -716,7 +686,6 @@
         </div>
     </div>
     
-    <!-- 作品详情模态框 -->
     <div class="modal-backdrop" id="work-modal">
         <div class="modal-content">
             <div class="close-modal" id="close-modal">
@@ -731,14 +700,12 @@
                 <div class="modal-back" id="modal-back">
                     <div class="modal-back-overlay"></div>
                     <div class="modal-back-content work-details" id="modal-details">
-                        <!-- 作品详情内容将通过JavaScript动态填充 -->
-                    </div>
+                        </div>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- 移动端遮罩层 -->
     <div id="overlay" class="fixed inset-0 bg-black bg-opacity-20 z-20 hidden md:hidden"></div>
 
     <script>
@@ -946,7 +913,7 @@
                 
                 <div class="work-section">
                     <h4>我的收获</h4>
-                    <p>${work.harvest}</p>
+                    <p>${work.收获}</p>
                 </div>
                 
                 <div class="work-section">
@@ -1036,7 +1003,8 @@
         });
         
         // 加载更多按钮功能
-        const loadMoreBtn = document.querySelector('button:contains("加载更多")');
+        // A simple querySelector for the button text content.
+        const loadMoreBtn = Array.from(document.querySelectorAll('button')).find(el => el.textContent.trim().includes('加载更多'));
         if (loadMoreBtn) {
             loadMoreBtn.addEventListener('click', function() {
                 this.innerHTML = '<i class="fa fa-spinner fa-spin mr-2"></i> 加载中...';
@@ -1051,5 +1019,6 @@
         }
     </script>
 </body>
+</html>
 </html>
     
